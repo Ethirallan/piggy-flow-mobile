@@ -1,10 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as fa;
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:http/http.dart';
-import 'package:piggy_flow_mobile/helpers/api_helper.dart';
 import 'package:piggy_flow_mobile/helpers/firebase_code_to_message.dart';
+import 'package:piggy_flow_mobile/models/user.dart';
 import 'package:piggy_flow_mobile/providers/es_message_provider.dart';
 import 'package:piggy_flow_mobile/providers/firebase_auth_provider.dart';
 import 'package:piggy_flow_mobile/providers/http_provider.dart';
@@ -17,13 +16,14 @@ class AuthPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     Future<String?> _login(LoginData data) async {
       try {
-        await ref.read(firebaseAuthProvider).signInWithEmailAndPassword(
-              email: data.name,
-              password: data.password,
+        await ref.read(authProvider).login(
+              context,
+              data.name,
+              data.password,
             );
 
         return null;
-      } on FirebaseAuthException catch (e) {
+      } on fa.FirebaseAuthException catch (e) {
         return firebaseCodeToMessage(e);
       } catch (e) {
         ref.read(esMessageProvider.state).state = const ESMessage(
@@ -37,16 +37,17 @@ class AuthPage extends HookConsumerWidget {
     Future<String?> _register(SignupData data) async {
       if (data.name != null || data.password == null) {
         try {
-          await ref.read(firebaseAuthProvider).createUserWithEmailAndPassword(
-                email: data.name!,
-                password: data.password!,
+          await ref.read(authProvider).register(
+                context,
+                data.name!,
+                data.password!,
               );
 
-          Response res = await createNewUser(ref.read(httpProvider));
+          User? user = await ref.read(httpProvider).authenticateUser();
 
-          if (res.statusCode == 200 || res.statusCode == 201) {
-            ref.read(firebaseAuthProvider).currentUser!.sendEmailVerification();
-            ref.read(firebaseAuthProvider).currentUser!.updateDisplayName(
+          if (user != null) {
+            ref.read(authProvider).sendEmailVerification();
+            ref.read(authProvider).updateDisplayName(
                   data.additionalSignupData?['username'] ?? data.name,
                 );
 
@@ -56,11 +57,11 @@ class AuthPage extends HookConsumerWidget {
 
             return 'Error';
           }
-        } on FirebaseAuthException catch (e) {
+        } on fa.FirebaseAuthException catch (e) {
           return firebaseCodeToMessage(e);
         } catch (e) {
-          if (ref.read(firebaseAuthProvider).currentUser != null) {
-            ref.read(firebaseAuthProvider).currentUser?.delete();
+          if (ref.read(authProvider).getCurrentUser() != null) {
+            ref.read(authProvider).deleteCurrentUser();
           }
           return 'Error';
         }
@@ -69,7 +70,7 @@ class AuthPage extends HookConsumerWidget {
     }
 
     Future<String?> _resetPassword(String name) async {
-      ref.read(firebaseAuthProvider).sendPasswordResetEmail(email: name);
+      ref.read(authProvider).sendPasswordResetEmail(name);
       return null;
     }
 

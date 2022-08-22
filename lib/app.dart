@@ -6,16 +6,22 @@ import 'package:piggy_flow_mobile/helpers/unfocus.dart';
 import 'package:piggy_flow_mobile/pages/auth/auth_page.dart';
 import 'package:piggy_flow_mobile/pages/auth/confirm_email_page.dart';
 import 'package:piggy_flow_mobile/pages/home/home_page.dart';
+import 'package:piggy_flow_mobile/pages/shop/account_list_page.dart';
+import 'package:piggy_flow_mobile/pages/shop/bill_list_page.dart';
+import 'package:piggy_flow_mobile/pages/shop/category_list_page.dart';
+import 'package:piggy_flow_mobile/pages/shop/shop_list_page.dart';
 import 'package:piggy_flow_mobile/providers/es_message_provider.dart';
 
 import 'providers/firebase_auth_provider.dart';
 
 class App extends ConsumerStatefulWidget {
+  const App({Key? key}) : super(key: key);
+
   @override
-  _AppState createState() => _AppState();
+  AppState createState() => AppState();
 }
 
-class _AppState extends ConsumerState<App> {
+class AppState extends ConsumerState<App> {
   User? user;
 
   @override
@@ -45,15 +51,15 @@ class _AppState extends ConsumerState<App> {
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(),
         ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 25),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(50),
-            ),
-            primary: Colors.blue,
-          ),
-        ),
+        // elevatedButtonTheme: ElevatedButtonThemeData(
+        //   style: ElevatedButton.styleFrom(
+        //     padding: const EdgeInsets.symmetric(vertical: 25),
+        //     shape: RoundedRectangleBorder(
+        //       borderRadius: BorderRadius.circular(50),
+        //     ),
+        //     primary: Colors.blue,
+        //   ),
+        // ),
         outlinedButtonTheme: OutlinedButtonThemeData(
           style: OutlinedButton.styleFrom(
             primary: Colors.blue,
@@ -105,6 +111,10 @@ class _AppState extends ConsumerState<App> {
         'home': (context) => const HomePage(),
         'auth': (context) => const AuthPage(),
         'confirm_email': (context) => const ConfirmEmailPage(),
+        'account_list': (context) => const AccountListPage(),
+        'shop_list': (context) => const ShopListPage(),
+        'category_list': (context) => const CategoryListPage(),
+        'bill_list': (context) => const BillListPage(),
       },
     );
   }
