@@ -23,6 +23,10 @@ _$_Bill _$$_BillFromJson(Map<String, dynamic> json) => _$_Bill(
           : Category.fromJson(json['category'] as Map<String, dynamic>),
       price: (json['price'] as num).toDouble(),
       comment: json['comment'] as String?,
+      photos: (json['photos'] as List<dynamic>?)
+              ?.map((e) => BillPhoto.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$$_BillToJson(_$_Bill instance) => <String, dynamic>{
@@ -34,4 +38,5 @@ Map<String, dynamic> _$$_BillToJson(_$_Bill instance) => <String, dynamic>{
       'category': instance.category?.toJson(),
       'price': instance.price,
       'comment': instance.comment,
+      'photos': instance.photos.map((e) => e.toJson()).toList(),
     };

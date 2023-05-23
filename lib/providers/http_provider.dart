@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:piggy_flow_mobile/models/account.dart';
 import 'package:piggy_flow_mobile/models/bill.dart';
 import 'package:piggy_flow_mobile/models/category.dart';
 import 'package:piggy_flow_mobile/models/user.dart';
+import 'package:piggy_flow_mobile/providers/firebase_auth_provider.dart';
 import 'package:piggy_flow_mobile/providers/http_client_provider.dart';
 import 'package:piggy_flow_mobile/models/shop.dart';
 
@@ -44,9 +46,6 @@ class HttpHelper {
 
   final BaseClient http;
   final Ref ref;
-  final Map<String, String> headers = {
-    'content-type': 'application/json',
-  };
 
   Future<User?> authenticateUser() async {
     User? user;
@@ -177,13 +176,53 @@ class HttpHelper {
     return bills;
   }
 
-  Future<bool> addBill(Bill bill) async {
+  Future<Bill?> getBillById(int id) async {
+    Bill? bill;
+
     try {
-      await http.post(
-        Uri.parse('${dotenv.env['API_URL']}/bill'),
-        headers: headers,
-        body: jsonEncode(bill.toJson()),
+      Response response = await http.get(
+        Uri.parse('${dotenv.env['API_URL']}/bill/getBillDetails/$id'),
       );
+      debugPrint(response.body);
+      bill = Bill.fromJson(jsonDecode(response.body.toString()));
+    } catch (e) {
+      debugPrint('get bills by id error: $e');
+    }
+
+    return bill;
+  }
+
+  Future<bool> addBill(Bill bill, List<XFile> photos) async {
+    try {
+      Uri url = Uri.parse('${dotenv.env['API_URL']}/bill');
+      if (photos.isEmpty) {
+        await http.post(
+          url,
+          headers: headers,
+          body: jsonEncode(bill.toJson()),
+        );
+      } else {
+        ref.read(progressProvider.notifier).reset();
+        ESMultipartRequest request = ESMultipartRequest(
+          'POST',
+          url,
+          onProgress: (progress, all) {
+            ref.read(progressProvider.notifier).setProgress(progress / all);
+          },
+        )
+          ..headers['Authorization'] =
+              'Bearer ${await ref.read(authProvider).getToken()}'
+          ..fields['body'] = jsonEncode(bill.toJson());
+
+        for (XFile photo in photos) {
+          request.files.add(await MultipartFile.fromPath('files', photo.path));
+        }
+
+        var streamedResponse = await request.send();
+
+        await Response.fromStream(streamedResponse);
+      }
+
       return true;
     } catch (e) {
       debugPrint('add new bill error: $e');

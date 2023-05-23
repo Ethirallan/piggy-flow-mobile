@@ -3,28 +3,26 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:piggy_flow_mobile/models/shop.dart';
 import 'package:piggy_flow_mobile/providers/http_provider.dart';
 
-final shopProvider =
-    StateNotifierProvider<ShopNotifier, AsyncValue<List<Shop>>?>((ref) {
+final shopProvider = StateNotifierProvider<ShopNotifier, List<Shop>>((ref) {
   return ShopNotifier(ref.read);
 });
 
-class ShopNotifier extends StateNotifier<AsyncValue<List<Shop>>?> {
+class ShopNotifier extends StateNotifier<List<Shop>> {
   ShopNotifier(
     this.read, [
-    AsyncValue<List<Shop>>? shops,
-  ]) : super(shops ?? const AsyncValue.loading()) {
+    List<Shop>? shops,
+  ]) : super(shops ?? []) {
     getShops();
   }
 
   final Reader read;
 
   Future<void> getShops() async {
+    print('--------- shopping ---------');
     try {
-      state = AsyncValue.data(
-        await read(httpProvider).getShopsByUser(),
-      );
+      state = await read(httpProvider).getShopsByUser();
     } catch (e) {
-      state = AsyncValue.error(e);
+      state = [];
       debugPrint('get shops $e');
     }
   }

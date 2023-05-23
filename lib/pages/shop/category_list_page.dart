@@ -22,45 +22,45 @@ class CategoryListPage extends HookConsumerWidget {
           style: TextStyle(),
         ),
       ),
-      body: Builder(
-        builder: (context) {
-          final categoryListState = ref.watch(categoryProvider);
-          return categoryListState!.when(
-            data: (List<Category> categories) {
-              return AnimationLimiter(
-                child: RefreshIndicator(
-                  backgroundColor: Colors.blue,
-                  color: Colors.white,
-                  onRefresh: () async {
-                    return ref.read(categoryProvider.notifier).getCategories();
-                  },
-                  child: ListView.separated(
-                    itemBuilder: (context, index) {
-                      return ESStaggeredList(
-                        index: index,
-                        child: ListTile(
-                          title: Text(categories[index].name),
-                          onTap: () {},
-                        ),
-                      );
-                    },
-                    separatorBuilder: (_, __) => const Divider(),
-                    itemCount: categories.length,
-                  ),
-                ),
-              );
-            },
-            loading: () => const Center(child: CircularProgressIndicator()),
-            error: (e, st) {
-              return Center(
-                child: Text(
-                  e.toString(),
-                ),
-              );
-            },
-          );
-        },
-      ),
+      // body: Builder(
+      //   builder: (context) {
+      //     final categoryListState = ref.watch(categoryProvider);
+      //     return categoryListState!.when(
+      //       data: (List<Category> categories) {
+      //         return AnimationLimiter(
+      //           child: RefreshIndicator(
+      //             backgroundColor: Colors.blue,
+      //             color: Colors.white,
+      //             onRefresh: () async {
+      //               return ref.read(categoryProvider.notifier).getCategories();
+      //             },
+      //             child: ListView.separated(
+      //               itemBuilder: (context, index) {
+      //                 return ESStaggeredList(
+      //                   index: index,
+      //                   child: ListTile(
+      //                     title: Text(categories[index].name),
+      //                     onTap: () {},
+      //                   ),
+      //                 );
+      //               },
+      //               separatorBuilder: (_, __) => const Divider(),
+      //               itemCount: categories.length,
+      //             ),
+      //           ),
+      //         );
+      //       },
+      //       loading: () => const Center(child: CircularProgressIndicator()),
+      //       error: (e, st) {
+      //         return Center(
+      //           child: Text(
+      //             e.toString(),
+      //           ),
+      //         );
+      //       },
+      //     );
+      //   },
+      // ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue,
         onPressed: () async {

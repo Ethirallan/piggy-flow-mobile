@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'user.dart';
 
@@ -37,7 +37,8 @@ mixin _$User {
 /// @nodoc
 abstract class $UserCopyWith<$Res> {
   factory $UserCopyWith(User value, $Res Function(User) then) =
-      _$UserCopyWithImpl<$Res>;
+      _$UserCopyWithImpl<$Res, User>;
+  @useResult
   $Res call(
       {int? id,
       String? uid,
@@ -50,58 +51,61 @@ abstract class $UserCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$UserCopyWithImpl<$Res> implements $UserCopyWith<$Res> {
+class _$UserCopyWithImpl<$Res, $Val extends User>
+    implements $UserCopyWith<$Res> {
   _$UserCopyWithImpl(this._value, this._then);
 
-  final User _value;
   // ignore: unused_field
-  final $Res Function(User) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? id = freezed,
     Object? uid = freezed,
     Object? email = freezed,
     Object? displayName = freezed,
-    Object? shops = freezed,
-    Object? categories = freezed,
-    Object? accounts = freezed,
-    Object? bills = freezed,
+    Object? shops = null,
+    Object? categories = null,
+    Object? accounts = null,
+    Object? bills = null,
   }) {
     return _then(_value.copyWith(
-      id: id == freezed
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      uid: uid == freezed
+      uid: freezed == uid
           ? _value.uid
           : uid // ignore: cast_nullable_to_non_nullable
               as String?,
-      email: email == freezed
+      email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String?,
-      displayName: displayName == freezed
+      displayName: freezed == displayName
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
               as String?,
-      shops: shops == freezed
+      shops: null == shops
           ? _value.shops
           : shops // ignore: cast_nullable_to_non_nullable
               as List<Shop>,
-      categories: categories == freezed
+      categories: null == categories
           ? _value.categories
           : categories // ignore: cast_nullable_to_non_nullable
               as List<Category>,
-      accounts: accounts == freezed
+      accounts: null == accounts
           ? _value.accounts
           : accounts // ignore: cast_nullable_to_non_nullable
               as List<Account>,
-      bills: bills == freezed
+      bills: null == bills
           ? _value.bills
           : bills // ignore: cast_nullable_to_non_nullable
               as List<Bill>,
-    ));
+    ) as $Val);
   }
 }
 
@@ -110,6 +114,7 @@ abstract class _$$_UserCopyWith<$Res> implements $UserCopyWith<$Res> {
   factory _$$_UserCopyWith(_$_User value, $Res Function(_$_User) then) =
       __$$_UserCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {int? id,
       String? uid,
@@ -122,55 +127,53 @@ abstract class _$$_UserCopyWith<$Res> implements $UserCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res>
+class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
     implements _$$_UserCopyWith<$Res> {
   __$$_UserCopyWithImpl(_$_User _value, $Res Function(_$_User) _then)
-      : super(_value, (v) => _then(v as _$_User));
+      : super(_value, _then);
 
-  @override
-  _$_User get _value => super._value as _$_User;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? id = freezed,
     Object? uid = freezed,
     Object? email = freezed,
     Object? displayName = freezed,
-    Object? shops = freezed,
-    Object? categories = freezed,
-    Object? accounts = freezed,
-    Object? bills = freezed,
+    Object? shops = null,
+    Object? categories = null,
+    Object? accounts = null,
+    Object? bills = null,
   }) {
     return _then(_$_User(
-      id: id == freezed
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      uid: uid == freezed
+      uid: freezed == uid
           ? _value.uid
           : uid // ignore: cast_nullable_to_non_nullable
               as String?,
-      email: email == freezed
+      email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String?,
-      displayName: displayName == freezed
+      displayName: freezed == displayName
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
               as String?,
-      shops: shops == freezed
+      shops: null == shops
           ? _value._shops
           : shops // ignore: cast_nullable_to_non_nullable
               as List<Shop>,
-      categories: categories == freezed
+      categories: null == categories
           ? _value._categories
           : categories // ignore: cast_nullable_to_non_nullable
               as List<Category>,
-      accounts: accounts == freezed
+      accounts: null == accounts
           ? _value._accounts
           : accounts // ignore: cast_nullable_to_non_nullable
               as List<Account>,
-      bills: bills == freezed
+      bills: null == bills
           ? _value._bills
           : bills // ignore: cast_nullable_to_non_nullable
               as List<Bill>,
@@ -211,6 +214,7 @@ class _$_User extends _User {
   @override
   @JsonKey()
   List<Shop> get shops {
+    if (_shops is EqualUnmodifiableListView) return _shops;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_shops);
   }
@@ -219,6 +223,7 @@ class _$_User extends _User {
   @override
   @JsonKey()
   List<Category> get categories {
+    if (_categories is EqualUnmodifiableListView) return _categories;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_categories);
   }
@@ -227,6 +232,7 @@ class _$_User extends _User {
   @override
   @JsonKey()
   List<Account> get accounts {
+    if (_accounts is EqualUnmodifiableListView) return _accounts;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_accounts);
   }
@@ -235,6 +241,7 @@ class _$_User extends _User {
   @override
   @JsonKey()
   List<Bill> get bills {
+    if (_bills is EqualUnmodifiableListView) return _bills;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_bills);
   }
@@ -249,11 +256,11 @@ class _$_User extends _User {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_User &&
-            const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.uid, uid) &&
-            const DeepCollectionEquality().equals(other.email, email) &&
-            const DeepCollectionEquality()
-                .equals(other.displayName, displayName) &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.uid, uid) || other.uid == uid) &&
+            (identical(other.email, email) || other.email == email) &&
+            (identical(other.displayName, displayName) ||
+                other.displayName == displayName) &&
             const DeepCollectionEquality().equals(other._shops, _shops) &&
             const DeepCollectionEquality()
                 .equals(other._categories, _categories) &&
@@ -265,10 +272,10 @@ class _$_User extends _User {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(uid),
-      const DeepCollectionEquality().hash(email),
-      const DeepCollectionEquality().hash(displayName),
+      id,
+      uid,
+      email,
+      displayName,
       const DeepCollectionEquality().hash(_shops),
       const DeepCollectionEquality().hash(_categories),
       const DeepCollectionEquality().hash(_accounts),
@@ -276,6 +283,7 @@ class _$_User extends _User {
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_UserCopyWith<_$_User> get copyWith =>
       __$$_UserCopyWithImpl<_$_User>(this, _$identity);
 

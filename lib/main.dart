@@ -17,7 +17,7 @@ void main() async {
     await dotenv.load(fileName: '.env');
 
     runApp(
-      ProviderScope(
+      const ProviderScope(
         child: App(),
       ),
     );

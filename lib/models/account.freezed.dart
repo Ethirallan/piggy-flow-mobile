@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'account.dart';
 
@@ -33,43 +33,47 @@ mixin _$Account {
 /// @nodoc
 abstract class $AccountCopyWith<$Res> {
   factory $AccountCopyWith(Account value, $Res Function(Account) then) =
-      _$AccountCopyWithImpl<$Res>;
+      _$AccountCopyWithImpl<$Res, Account>;
+  @useResult
   $Res call({int? id, String name, List<User> users, List<Bill> bills});
 }
 
 /// @nodoc
-class _$AccountCopyWithImpl<$Res> implements $AccountCopyWith<$Res> {
+class _$AccountCopyWithImpl<$Res, $Val extends Account>
+    implements $AccountCopyWith<$Res> {
   _$AccountCopyWithImpl(this._value, this._then);
 
-  final Account _value;
   // ignore: unused_field
-  final $Res Function(Account) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? id = freezed,
-    Object? name = freezed,
-    Object? users = freezed,
-    Object? bills = freezed,
+    Object? name = null,
+    Object? users = null,
+    Object? bills = null,
   }) {
     return _then(_value.copyWith(
-      id: id == freezed
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      name: name == freezed
+      name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      users: users == freezed
+      users: null == users
           ? _value.users
           : users // ignore: cast_nullable_to_non_nullable
               as List<User>,
-      bills: bills == freezed
+      bills: null == bills
           ? _value.bills
           : bills // ignore: cast_nullable_to_non_nullable
               as List<Bill>,
-    ));
+    ) as $Val);
   }
 }
 
@@ -79,39 +83,39 @@ abstract class _$$_AccountCopyWith<$Res> implements $AccountCopyWith<$Res> {
           _$_Account value, $Res Function(_$_Account) then) =
       __$$_AccountCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({int? id, String name, List<User> users, List<Bill> bills});
 }
 
 /// @nodoc
-class __$$_AccountCopyWithImpl<$Res> extends _$AccountCopyWithImpl<$Res>
+class __$$_AccountCopyWithImpl<$Res>
+    extends _$AccountCopyWithImpl<$Res, _$_Account>
     implements _$$_AccountCopyWith<$Res> {
   __$$_AccountCopyWithImpl(_$_Account _value, $Res Function(_$_Account) _then)
-      : super(_value, (v) => _then(v as _$_Account));
+      : super(_value, _then);
 
-  @override
-  _$_Account get _value => super._value as _$_Account;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? id = freezed,
-    Object? name = freezed,
-    Object? users = freezed,
-    Object? bills = freezed,
+    Object? name = null,
+    Object? users = null,
+    Object? bills = null,
   }) {
     return _then(_$_Account(
-      id: id == freezed
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      name: name == freezed
+      name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      users: users == freezed
+      users: null == users
           ? _value._users
           : users // ignore: cast_nullable_to_non_nullable
               as List<User>,
-      bills: bills == freezed
+      bills: null == bills
           ? _value._bills
           : bills // ignore: cast_nullable_to_non_nullable
               as List<Bill>,
@@ -143,6 +147,7 @@ class _$_Account extends _Account with DiagnosticableTreeMixin {
   @override
   @JsonKey()
   List<User> get users {
+    if (_users is EqualUnmodifiableListView) return _users;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_users);
   }
@@ -151,6 +156,7 @@ class _$_Account extends _Account with DiagnosticableTreeMixin {
   @override
   @JsonKey()
   List<Bill> get bills {
+    if (_bills is EqualUnmodifiableListView) return _bills;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_bills);
   }
@@ -176,8 +182,8 @@ class _$_Account extends _Account with DiagnosticableTreeMixin {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Account &&
-            const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.name, name) &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.name, name) || other.name == name) &&
             const DeepCollectionEquality().equals(other._users, _users) &&
             const DeepCollectionEquality().equals(other._bills, _bills));
   }
@@ -186,13 +192,14 @@ class _$_Account extends _Account with DiagnosticableTreeMixin {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(name),
+      id,
+      name,
       const DeepCollectionEquality().hash(_users),
       const DeepCollectionEquality().hash(_bills));
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_AccountCopyWith<_$_Account> get copyWith =>
       __$$_AccountCopyWithImpl<_$_Account>(this, _$identity);
 

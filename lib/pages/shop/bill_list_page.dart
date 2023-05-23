@@ -4,6 +4,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:piggy_flow_mobile/es_widgets/es_staggered_list.dart';
 import 'package:piggy_flow_mobile/models/bill.dart';
+import 'package:piggy_flow_mobile/pages/bill/new_bill_page.dart';
 import 'package:piggy_flow_mobile/providers/es_message_provider.dart';
 import 'package:piggy_flow_mobile/providers/http_provider.dart';
 import 'package:piggy_flow_mobile/providers/bill_provider.dart';
@@ -64,20 +65,21 @@ class BillListPage extends HookConsumerWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue,
         onPressed: () async {
-          Bill bill = Bill(date: DateTime.now(), price: 9.99, comment: 'Comment');
-          bool success = await ref.read(httpProvider).addBill(bill);
-          if (success) {
-            ref.read(esMessageProvider.state).state = const ESMessage(
-              'Successfuly added new bill',
-              Colors.green,
-            );
-            ref.read(billProvider.notifier).getBills();
-          } else {
-            ref.read(esMessageProvider.state).state = const ESMessage(
-              'Error creating new bill',
-              Colors.red,
-            );
-          }
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const NewBillPage()));
+          // Bill bill = Bill(date: DateTime.now(), price: 9.99, comment: 'Comment');
+          // bool success = await ref.read(httpProvider).addBill(bill);
+          // if (success) {
+          //   ref.read(esMessageProvider.state).state = const ESMessage(
+          //     'Successfuly added new bill',
+          //     Colors.green,
+          //   );
+          //   ref.read(billProvider.notifier).getBills();
+          // } else {
+          //   ref.read(esMessageProvider.state).state = const ESMessage(
+          //     'Error creating new bill',
+          //     Colors.red,
+          //   );
+          // }
         },
         child: const Icon(
           Icons.add,

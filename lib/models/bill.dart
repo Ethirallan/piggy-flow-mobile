@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:piggy_flow_mobile/models/account.dart';
+import 'package:piggy_flow_mobile/models/bill_photo.dart';
 import 'package:piggy_flow_mobile/models/category.dart';
 import 'package:piggy_flow_mobile/models/shop.dart';
 import 'package:piggy_flow_mobile/models/user.dart';
@@ -21,6 +22,7 @@ abstract class Bill implements _$Bill {
     Category? category,
     required double price,
     String? comment,
+    @Default([]) List<BillPhoto> photos,
   }) = _Bill;
 
   factory Bill.fromJson(Map<String, dynamic> json) => _$BillFromJson(json);

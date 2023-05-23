@@ -24,9 +24,9 @@ class AuthenticatedHttpClient extends http.BaseClient {
   }
 }
 
-class IRMultipartRequest extends http.MultipartRequest {
+class ESMultipartRequest extends http.MultipartRequest {
   /// Creates a new [MultipartRequest].
-  IRMultipartRequest(
+  ESMultipartRequest(
     String method,
     Uri url, {
     required this.onProgress,

@@ -22,45 +22,45 @@ class ShopListPage extends HookConsumerWidget {
           style: TextStyle(),
         ),
       ),
-      body: Builder(
-        builder: (context) {
-          final shopListState = ref.watch(shopProvider);
-          return shopListState!.when(
-            data: (List<Shop> shops) {
-              return AnimationLimiter(
-                child: RefreshIndicator(
-                  backgroundColor: Colors.blue,
-                  color: Colors.white,
-                  onRefresh: () async {
-                    return ref.read(shopProvider.notifier).getShops();
-                  },
-                  child: ListView.separated(
-                    itemBuilder: (context, index) {
-                      return ESStaggeredList(
-                        index: index,
-                        child: ListTile(
-                          title: Text(shops[index].name),
-                          onTap: () {},
-                        ),
-                      );
-                    },
-                    separatorBuilder: (_, __) => const Divider(),
-                    itemCount: shops.length,
-                  ),
-                ),
-              );
-            },
-            loading: () => const Center(child: CircularProgressIndicator()),
-            error: (e, st) {
-              return Center(
-                child: Text(
-                  e.toString(),
-                ),
-              );
-            },
-          );
-        },
-      ),
+      // body: Builder(
+      //   builder: (context) {
+      //     final shopListState = ref.watch(shopProvider);
+      //     return shopListState!.when(
+      //       data: (List<Shop> shops) {
+      //         return AnimationLimiter(
+      //           child: RefreshIndicator(
+      //             backgroundColor: Colors.blue,
+      //             color: Colors.white,
+      //             onRefresh: () async {
+      //               return ref.read(shopProvider.notifier).getShops();
+      //             },
+      //             child: ListView.separated(
+      //               itemBuilder: (context, index) {
+      //                 return ESStaggeredList(
+      //                   index: index,
+      //                   child: ListTile(
+      //                     title: Text(shops[index].name),
+      //                     onTap: () {},
+      //                   ),
+      //                 );
+      //               },
+      //               separatorBuilder: (_, __) => const Divider(),
+      //               itemCount: shops.length,
+      //             ),
+      //           ),
+      //         );
+      //       },
+      //       loading: () => const Center(child: CircularProgressIndicator()),
+      //       error: (e, st) {
+      //         return Center(
+      //           child: Text(
+      //             e.toString(),
+      //           ),
+      //         );
+      //       },
+      //     );
+      //   },
+      // ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue,
         onPressed: () async {
