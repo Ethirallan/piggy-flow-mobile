@@ -14,7 +14,7 @@ class AuthPage extends HookConsumerWidget {
   Duration get loginTime => const Duration(milliseconds: 2250);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Future<String?> _login(LoginData data) async {
+    Future<String?> login(LoginData data) async {
       try {
         await ref.read(authProvider).login(
               context,
@@ -34,7 +34,7 @@ class AuthPage extends HookConsumerWidget {
       }
     }
 
-    Future<String?> _register(SignupData data) async {
+    Future<String?> register(SignupData data) async {
       if (data.name != null || data.password == null) {
         try {
           await ref.read(authProvider).register(
@@ -69,22 +69,28 @@ class AuthPage extends HookConsumerWidget {
       return null;
     }
 
-    Future<String?> _resetPassword(String name) async {
+    Future<String?> resetPassword(String name) async {
       ref.read(authProvider).sendPasswordResetEmail(name);
       return null;
     }
 
     return FlutterLogin(
       title: 'Piggy Flow',
-      onLogin: _login,
-      onSignup: _register,
+      logo: 'assets/piggy-flow-icon.png',
+      onLogin: login,
+      onSignup: register,
       onSubmitAnimationCompleted: () {
         Navigator.of(context).pushReplacementNamed('confirm_email');
       },
-      onRecoverPassword: _resetPassword,
+      onRecoverPassword: resetPassword,
       additionalSignupFields: const [
         UserFormField(keyName: 'displayName', displayName: 'Username'),
       ],
+      theme: LoginTheme(
+        primaryColor: const Color(0xFFFE3F58),
+        switchAuthTextColor: Theme.of(context).primaryColor,
+        // pageColorLight: const Color(0xFFFFF3F2),
+      ),
     );
   }
 }

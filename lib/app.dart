@@ -37,44 +37,48 @@ class AppState extends ConsumerState<App> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        fontFamily: 'Neue Haas Grotesk Display Pro',
-        buttonTheme: ButtonThemeData(
-          buttonColor: Colors.blue,
-          height: 72,
-          textTheme: ButtonTextTheme.accent,
-          colorScheme: Theme.of(context).colorScheme.copyWith(
-                primary: Colors.blue,
-                secondary: Colors.white,
-              ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(50),
-          ),
-        ),
-        textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(),
-        ),
-        // elevatedButtonTheme: ElevatedButtonThemeData(
-        //   style: ElevatedButton.styleFrom(
-        //     padding: const EdgeInsets.symmetric(vertical: 25),
-        //     shape: RoundedRectangleBorder(
-        //       borderRadius: BorderRadius.circular(50),
-        //     ),
-        //     primary: Colors.blue,
+        // buttonTheme: ButtonThemeData(
+        //   buttonColor: Colors.blue,
+        //   height: 72,
+        //   textTheme: ButtonTextTheme.accent,
+        //   colorScheme: Theme.of(context).colorScheme.copyWith(
+        //         primary: Colors.blue,
+        //         secondary: Colors.white,
+        //       ),
+        //   shape: RoundedRectangleBorder(
+        //     borderRadius: BorderRadius.circular(50),
         //   ),
         // ),
+        // textButtonTheme: TextButtonThemeData(
+        //   style: TextButton.styleFrom(),
+        // ),
+        textTheme: Theme.of(context).textTheme.apply(
+              bodyColor: const Color(0xFF574141),
+              displayColor: const Color(0xFF574141),
+            ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 80),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(50),
+            ),
+            // backgroundColor: Colors
+          ),
+        ),
         outlinedButtonTheme: OutlinedButtonThemeData(
           style: OutlinedButton.styleFrom(
-            foregroundColor: Colors.blue,
             padding: const EdgeInsets.symmetric(vertical: 25),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(50),
             ),
           ),
         ),
-        scaffoldBackgroundColor: Colors.white,
+        scaffoldBackgroundColor: const Color(0xFFFFF3F2),
         colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: createMaterialColor(Colors.blue),
-        ).copyWith(secondary: Colors.white),
+          primarySwatch: createMaterialColor(const Color(0xFFFE3F58)),
+        ).copyWith(
+          secondary: const Color(0xFFBD8180),
+        ),
       ),
       builder: (context, child) {
         return HookConsumer(

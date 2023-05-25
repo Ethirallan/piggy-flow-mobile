@@ -26,6 +26,7 @@ class NewBillPage extends HookConsumerWidget {
     useAutomaticKeepAlive(wantKeepAlive: true);
     final photos = useState<List<XFile>>([]);
     final pageController = usePageController();
+    final page = useState<int>(0);
     const Curve slideCurve = Curves.easeInToLinear;
     const Duration slideDuration = Duration(milliseconds: 300);
     final shopList = ref.read(shopProvider);
@@ -44,6 +45,8 @@ class NewBillPage extends HookConsumerWidget {
       text: newBill.value.comment,
     );
     final formKey = useState<GlobalKey<FormState>>(GlobalKey<FormState>());
+    useListenable(priceCtrl);
+    useListenable(pageController);
 
     Future getImage(ImageSource source) async {
       if (source == ImageSource.camera) {
@@ -63,273 +66,317 @@ class NewBillPage extends HookConsumerWidget {
       }
     }
 
-    return Scaffold(
-      body: SafeArea(
-        child: Form(
-          key: formKey.value,
-          child: Column(
-            children: [
-              Container(
-                height: 100,
-                color: Colors.blue,
-                child: Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        pageController.previousPage(
-                            duration: slideDuration, curve: slideCurve);
-                      },
-                      icon: const Icon(Icons.arrow_back),
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+        // return (await showDialog(
+        //       context: context,
+        //       builder: (context) => DiscardDialog(),
+        //     )) ??
+        //     false;
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: Form(
+            key: formKey.value,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: SizedBox(
+                    height: 120,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        page.value > 0
+                            ? IconButton(
+                                onPressed: () {
+                                  pageController.previousPage(
+                                      duration: slideDuration,
+                                      curve: slideCurve);
+                                  page.value--;
+                                },
+                                icon: const Icon(Icons.arrow_back),
+                              )
+                            : const SizedBox(
+                                width: 48,
+                              ),
+                        Image.asset('assets/piggy-flow-icon.png'),
+                        IconButton(
+                          onPressed: () => Navigator.pop(context),
+                          icon: const Icon(Icons.clear),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-              Expanded(
-                child: PageView(
-                  controller: pageController,
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: [
-                    NewBillSlide(
-                      title: 'Price',
-                      buttonLabel: 'Continue',
-                      next: () {
-                        if (formKey.value.currentState!.validate()) {
+                Expanded(
+                  child: PageView(
+                    controller: pageController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: [
+                      NewBillSlide(
+                        title: 'How much did you spend?',
+                        buttonLabel: 'CONTINUE',
+                        buttonEnabled: priceCtrl.value.text.length > 1,
+                        next: () {
+                          if (formKey.value.currentState!.validate()) {
+                            pageController.nextPage(
+                                duration: slideDuration, curve: slideCurve);
+                            page.value++;
+                          }
+                        },
+                        child: TextFormField(
+                          controller: priceCtrl,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                              RegExp(r'^\d*\.?\d{0,2}'),
+                            ),
+                          ],
+                          decoration: const InputDecoration(
+                            hintText: '0.00 €',
+                            border: InputBorder.none,
+                          ),
+                          enableInteractiveSelection: false,
+                          showCursor: false,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 50,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          autofocus: true,
+                          onChanged: (String value) {
+                            if (value == '') {
+                              priceCtrl.clear;
+                            } else {
+                              priceCtrl.value =
+                                  priceCtrl.value.copyWith(text: "$value €");
+                            }
+                          },
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
+                        ),
+                      ),
+                      NewBillSlide(
+                        title: 'Category',
+                        buttonLabel: 'CONTINUE',
+                        next: () {
                           pageController.nextPage(
                               duration: slideDuration, curve: slideCurve);
-                        }
-                      },
-                      child: TextFormField(
-                        controller: priceCtrl,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(
-                            RegExp(r'^\d*\.?\d{0,2}'),
-                          ),
-                        ],
-                        decoration: const InputDecoration(
-                          hintText: '0.00 €',
-                        ),
-                        autofocus: true,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please input the price';
-                          }
-                          return null;
+                          page.value++;
                         },
-                        keyboardType: const TextInputType.numberWithOptions(
-                          decimal: true,
-                        ),
-                      ),
-                    ),
-                    NewBillSlide(
-                      title: 'Category',
-                      buttonLabel: 'Continue',
-                      next: () {
-                        pageController.nextPage(
-                            duration: slideDuration, curve: slideCurve);
-                      },
-                      child: DropdownSearch<String>(
-                        popupProps: const PopupProps.menu(
-                          showSelectedItems: true,
-                        ),
-                        items: categoryList
-                            .map((Category category) => category.name)
-                            .toList(),
-                        dropdownDecoratorProps: const DropDownDecoratorProps(
-                          dropdownSearchDecoration: InputDecoration(
-                            labelText: 'Category',
-                            hintText: 'Select a category',
+                        child: DropdownSearch<String>(
+                          popupProps: const PopupProps.menu(
+                            showSelectedItems: true,
                           ),
-                        ),
-                        onChanged: (value) {
-                          newBill.value = newBill.value.copyWith(
-                              category: categoryList
-                                  .where((Category category) =>
-                                      category.name == value)
-                                  .first);
-                        },
-                        selectedItem: newBill.value.category?.name ?? '',
-                      ),
-                    ),
-                    NewBillSlide(
-                      title: 'Shop',
-                      buttonLabel: 'Continue',
-                      next: () {
-                        pageController.nextPage(
-                            duration: slideDuration, curve: slideCurve);
-                      },
-                      child: DropdownSearch<String>(
-                        popupProps: const PopupProps.menu(
-                          showSelectedItems: true,
-                        ),
-                        items: shopList.map((Shop shop) => shop.name).toList(),
-                        dropdownDecoratorProps: const DropDownDecoratorProps(
-                          dropdownSearchDecoration: InputDecoration(
-                            labelText: 'Shop',
-                            hintText: 'Select a shop',
-                          ),
-                        ),
-                        onChanged: (value) {
-                          newBill.value = newBill.value.copyWith(
-                              shop: shopList
-                                  .where((Shop shop) => shop.name == value)
-                                  .first);
-                        },
-                        selectedItem: newBill.value.shop?.name ?? '',
-                      ),
-                    ),
-                    NewBillSlide(
-                      title: 'Photos',
-                      buttonLabel: 'Continue',
-                      next: () {
-                        pageController.nextPage(
-                            duration: slideDuration, curve: slideCurve);
-                      },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          if (photos.value.isNotEmpty) const Text('Photos:'),
-                          if (photos.value.isNotEmpty)
-                            const SizedBox(
-                              height: 10,
+                          items: categoryList
+                              .map((Category category) => category.name)
+                              .toList(),
+                          dropdownDecoratorProps: const DropDownDecoratorProps(
+                            dropdownSearchDecoration: InputDecoration(
+                              labelText: 'Category',
+                              hintText: 'Select a category',
                             ),
-                          if (photos.value.isNotEmpty)
-                            SizedBox(
-                              height: 120,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: photos.value.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return ESStaggeredGrid(
-                                    index: index,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(4),
-                                      child: Stack(
-                                        children: [
-                                          SizedBox(
-                                            height: 110,
-                                            width: 110,
-                                            child: Card(
-                                              elevation: 4,
-                                              shape:
-                                                  const RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(15),
-                                                ),
-                                              ),
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                  Radius.circular(15),
-                                                ),
-                                                child: Image.file(
-                                                  File(
-                                                      photos.value[index].path),
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Positioned(
-                                            right: 4,
-                                            top: 4,
-                                            child: Container(
-                                              height: 30,
-                                              width: 30,
-                                              decoration: const BoxDecoration(
-                                                shape: BoxShape.circle,
-                                              ),
-                                              child: IconButton(
-                                                icon: const Icon(
-                                                  Icons.clear,
-                                                  size: 20,
-                                                ),
-                                                padding: EdgeInsets.zero,
-                                                onPressed: () {
-                                                  photos.value.removeAt(index);
-                                                  var temp = photos.value;
-                                                  photos.value = [];
-                                                  photos.value = temp;
-                                                },
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
+                          ),
+                          onChanged: (value) {
+                            newBill.value = newBill.value.copyWith(
+                                category: categoryList
+                                    .where((Category category) =>
+                                        category.name == value)
+                                    .first);
+                          },
+                          selectedItem: newBill.value.category?.name ?? '',
+                        ),
+                      ),
+                      NewBillSlide(
+                        title: 'Shop',
+                        buttonLabel: 'CONTINUE',
+                        next: () {
+                          pageController.nextPage(
+                              duration: slideDuration, curve: slideCurve);
+                          page.value++;
+                        },
+                        child: DropdownSearch<String>(
+                          popupProps: const PopupProps.menu(
+                            showSelectedItems: true,
+                          ),
+                          items:
+                              shopList.map((Shop shop) => shop.name).toList(),
+                          dropdownDecoratorProps: const DropDownDecoratorProps(
+                            dropdownSearchDecoration: InputDecoration(
+                              labelText: 'Shop',
+                              hintText: 'Select a shop',
+                            ),
+                          ),
+                          onChanged: (value) {
+                            newBill.value = newBill.value.copyWith(
+                                shop: shopList
+                                    .where((Shop shop) => shop.name == value)
+                                    .first);
+                          },
+                          selectedItem: newBill.value.shop?.name ?? '',
+                        ),
+                      ),
+                      NewBillSlide(
+                        title: 'Photos',
+                        buttonLabel: 'CONTINUE',
+                        next: () {
+                          pageController.nextPage(
+                              duration: slideDuration, curve: slideCurve);
+                          page.value++;
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            if (photos.value.isNotEmpty) const Text('Photos:'),
+                            if (photos.value.isNotEmpty)
+                              const SizedBox(
+                                height: 10,
                               ),
+                            if (photos.value.isNotEmpty)
+                              SizedBox(
+                                height: 120,
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: photos.value.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return ESStaggeredGrid(
+                                      index: index,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(4),
+                                        child: Stack(
+                                          children: [
+                                            SizedBox(
+                                              height: 110,
+                                              width: 110,
+                                              child: Card(
+                                                elevation: 4,
+                                                shape:
+                                                    const RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                    Radius.circular(15),
+                                                  ),
+                                                ),
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                    Radius.circular(15),
+                                                  ),
+                                                  child: Image.file(
+                                                    File(photos
+                                                        .value[index].path),
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Positioned(
+                                              right: 4,
+                                              top: 4,
+                                              child: Container(
+                                                height: 30,
+                                                width: 30,
+                                                decoration: const BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: IconButton(
+                                                  icon: const Icon(
+                                                    Icons.clear,
+                                                    size: 20,
+                                                  ),
+                                                  padding: EdgeInsets.zero,
+                                                  onPressed: () {
+                                                    photos.value
+                                                        .removeAt(index);
+                                                    var temp = photos.value;
+                                                    photos.value = [];
+                                                    photos.value = temp;
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            const SizedBox(
+                              height: 20,
                             ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          // elevated button for adding photos
-                          ElevatedButton(
-                            onPressed: () {
-                              getImage(ImageSource.gallery);
-                            },
-                            child: const Text('Add a photo'),
-                          ),
-                        ],
+                            // elevated button for adding photos
+                            ElevatedButton(
+                              onPressed: () {
+                                getImage(ImageSource.gallery);
+                              },
+                              child: const Text('Add a photo'),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    NewBillSlide(
-                      title: 'Date and comment',
-                      buttonLabel: 'Save',
-                      next: () async {
-                        newBill.value = newBill.value.copyWith(
-                          price: double.parse(priceCtrl.text),
-                          comment: commentCtrl.text,
-                        );
+                      NewBillSlide(
+                        title: 'Date and comment',
+                        buttonLabel: 'Save',
+                        next: () async {
+                          newBill.value = newBill.value.copyWith(
+                            price: double.parse(
+                                priceCtrl.text.replaceAll('€', '').trim()),
+                            comment: commentCtrl.text,
+                          );
 
-                        bool success = await ref
-                            .read(httpProvider)
-                            .addBill(newBill.value, photos.value);
-                        if (success) {
-                          ref.read(esMessageProvider.state).state =
-                              const ESMessage(
-                            'Successfuly added new bill',
-                            Colors.green,
-                          );
-                          ref.read(billProvider.notifier).getBills();
-                          if (context.mounted) Navigator.pop(context);
-                        } else {
-                          ref.read(esMessageProvider.state).state =
-                              const ESMessage(
-                            'Error creating new bill',
-                            Colors.red,
-                          );
-                        }
-                      },
-                      child: Column(
-                        children: [
-                          DateTimePicker(
-                            initialValue: DateTime.now().toString(),
-                            dateMask: 'dd. MM. yyyy',
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2100),
-                            dateLabelText: 'Date',
-                            onSaved: (String? val) {
-                              if (val != null) {
-                                newBill.value = newBill.value.copyWith(
-                                  date: DateTime.parse(val),
-                                );
-                              }
-                            },
-                          ),
-                          TextFormField(
-                            controller: commentCtrl,
-                            minLines: 1,
-                            maxLines: 30,
-                            keyboardType: TextInputType.multiline,
-                          ),
-                        ],
+                          bool success = await ref
+                              .read(httpProvider)
+                              .addBill(newBill.value, photos.value);
+                          if (success) {
+                            ref.read(esMessageProvider.state).state =
+                                const ESMessage(
+                              'Successfuly added new bill',
+                              Colors.green,
+                            );
+                            ref.read(billProvider.notifier).getBills();
+                            if (context.mounted) Navigator.pop(context);
+                          } else {
+                            ref.read(esMessageProvider.state).state =
+                                const ESMessage(
+                              'Error creating new bill',
+                              Colors.red,
+                            );
+                          }
+                        },
+                        child: Column(
+                          children: [
+                            DateTimePicker(
+                              initialValue: DateTime.now().toString(),
+                              dateMask: 'dd. MM. yyyy',
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2100),
+                              dateLabelText: 'Date',
+                              onSaved: (String? val) {
+                                if (val != null) {
+                                  newBill.value = newBill.value.copyWith(
+                                    date: DateTime.parse(val),
+                                  );
+                                }
+                              },
+                            ),
+                            TextFormField(
+                              controller: commentCtrl,
+                              minLines: 1,
+                              maxLines: 30,
+                              keyboardType: TextInputType.multiline,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

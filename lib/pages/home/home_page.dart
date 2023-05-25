@@ -91,7 +91,7 @@ class HomePage extends HookConsumerWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blue,
+        // backgroundColor: Colors.primaries.first,
         onPressed: () async {
           Navigator.of(context).push(
             MaterialPageRoute(
