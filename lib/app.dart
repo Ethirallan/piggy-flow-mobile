@@ -11,6 +11,7 @@ import 'package:piggy_flow_mobile/pages/setttings/settings_page.dart';
 import 'package:piggy_flow_mobile/pages/account/account_list_page.dart';
 import 'package:piggy_flow_mobile/pages/shop/shop_list_page.dart';
 import 'package:piggy_flow_mobile/pages/statistics/statistic_page.dart';
+import 'package:piggy_flow_mobile/providers/account_provider.dart';
 import 'package:piggy_flow_mobile/providers/category_provider.dart';
 import 'package:piggy_flow_mobile/providers/es_message_provider.dart';
 import 'package:piggy_flow_mobile/providers/shop_provider.dart';
@@ -89,6 +90,7 @@ class AppState extends ConsumerState<App> {
         return HookConsumer(
           builder: (BuildContext context, WidgetRef ref, Widget? child) {
             if (ref.read(firebaseAuthProvider).currentUser != null) {
+              ref.read(accountProvider);
               ref.read(shopProvider);
               ref.read(categoryProvider);
             }

@@ -4,9 +4,13 @@ import 'package:flutter_login/flutter_login.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:piggy_flow_mobile/helpers/firebase_code_to_message.dart';
 import 'package:piggy_flow_mobile/models/user.dart';
+import 'package:piggy_flow_mobile/providers/account_provider.dart';
 import 'package:piggy_flow_mobile/providers/es_message_provider.dart';
 import 'package:piggy_flow_mobile/providers/firebase_auth_provider.dart';
 import 'package:piggy_flow_mobile/providers/http_provider.dart';
+import 'package:piggy_flow_mobile/providers/shop_provider.dart';
+
+import '../../providers/category_provider.dart';
 
 class AuthPage extends HookConsumerWidget {
   const AuthPage({Key? key}) : super(key: key);
@@ -46,6 +50,9 @@ class AuthPage extends HookConsumerWidget {
           User? user = await ref.read(httpProvider).authenticateUser();
 
           if (user != null) {
+            ref.read(accountProvider);
+            ref.read(shopProvider);
+            ref.read(categoryProvider);
             ref.read(authProvider).sendEmailVerification();
             ref.read(authProvider).updateDisplayName(
                   data.additionalSignupData?['username'] ?? data.name,

@@ -8,10 +8,12 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:piggy_flow_mobile/es_widgets/es_staggered_grid.dart';
+import 'package:piggy_flow_mobile/models/account.dart';
 import 'package:piggy_flow_mobile/models/bill.dart';
 import 'package:piggy_flow_mobile/models/category.dart';
 import 'package:piggy_flow_mobile/models/shop.dart';
 import 'package:piggy_flow_mobile/pages/bill/new_bill_slide.dart';
+import 'package:piggy_flow_mobile/providers/account_provider.dart';
 import 'package:piggy_flow_mobile/providers/bill_provider.dart';
 import 'package:piggy_flow_mobile/providers/category_provider.dart';
 import 'package:piggy_flow_mobile/providers/es_message_provider.dart';
@@ -30,6 +32,7 @@ class NewBillPage extends HookConsumerWidget {
     final page = useState<int>(0);
     const Curve slideCurve = Curves.easeInToLinear;
     const Duration slideDuration = Duration(milliseconds: 300);
+    final accountList = ref.read(accountProvider);
     final shopList = ref.read(shopProvider);
     final categoryList = ref.read(categoryProvider);
     final newBill = useState<Bill>(
@@ -205,6 +208,44 @@ class NewBillPage extends HookConsumerWidget {
                               page.value++;
                             }
                           },
+                        ),
+                      ),
+                      NewBillSlide(
+                        title: 'Account',
+                        buttonLabel: 'CONTINUE',
+                        next: () {
+                          pageController.nextPage(
+                              duration: slideDuration, curve: slideCurve);
+                          page.value++;
+                        },
+                        child: DropdownSearch<String>(
+                          popupProps: const PopupProps.menu(
+                            showSelectedItems: true,
+                          ),
+                          items: [
+                            'Personal',
+                            ...accountList
+                                .map((Account account) => account.name)
+                                .toList()
+                          ],
+                          dropdownDecoratorProps: const DropDownDecoratorProps(
+                            dropdownSearchDecoration: InputDecoration(
+                              labelText: 'Account',
+                              hintText: 'Select an account',
+                            ),
+                          ),
+                          onChanged: (value) {
+                            newBill.value = newBill.value.copyWith(
+                              account: value == 'Personal'
+                                  ? null
+                                  : accountList
+                                      .where((Account account) =>
+                                          account.name == value)
+                                      .first,
+                            );
+                          },
+                          selectedItem:
+                              newBill.value.account?.name ?? 'Personal',
                         ),
                       ),
                       NewBillSlide(
@@ -419,6 +460,10 @@ class NewBillPage extends HookConsumerWidget {
                               minLines: 1,
                               maxLines: 30,
                               keyboardType: TextInputType.multiline,
+                              decoration: const InputDecoration(
+                                labelText: 'Notes',
+                                hintText: 'Add notes',
+                              ),
                             ),
                           ],
                         ),
