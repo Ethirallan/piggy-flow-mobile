@@ -53,12 +53,13 @@ dependencies:
   http: ^0.13.5
   flutter_dotenv: ^5.0.2
   shared_preferences: ^2.1.0
-  flutter_native_splash: ^2.2.19
   json_annotation: ^4.8.0
   flutter_login: ^4.1.1
   date_time_picker: ^2.1.0
   dropdown_search: ^5.0.6
   intl: ^0.17.0
+  fl_chart: ^0.63.0
+  flutter_native_splash: ^2.3.1
 
 dev_dependencies:
   flutter_test:
@@ -80,15 +81,18 @@ dev_dependencies:
 
 
 # flutter pub run flutter_launcher_icons:main
-# flutter_icons:
-#   android: "launcher_icon"
-#   ios: true
-#   image_path: "assets/icon.png"
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/piggy-flow.jpg"
 
 # flutter pub pub run flutter_native_splash:create
-# flutter_native_splash:
-#   image: assets/icon.png
-#   color: "#000000"
+flutter_native_splash:
+  image: assets/piggy-flow-icon.png
+  color: "#FFF3F2"
+  android_12:
+    image: assets/piggy-flow-icon.png
+    color: "#FFF3F2"
 
 
 # The following section is specific to Flutter packages.

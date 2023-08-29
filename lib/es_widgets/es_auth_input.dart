@@ -11,7 +11,7 @@ class ESAuthInput extends StatelessWidget {
   final VoidCallback? onEditingComplete;
   final FocusNode? focusNode;
 
-  ESAuthInput({
+  const ESAuthInput({super.key, 
     required this.ctrl,
     required this.label,
     this.obscureText = false,

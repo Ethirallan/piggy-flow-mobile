@@ -15,7 +15,12 @@ class BillDetailsPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final dateformat = DateFormat('d. M. yyyy @ HH:mm');
+    final dateformat = DateFormat('d. M. yyyy HH:mm');
+
+    final priceFormatter = NumberFormat.currency(
+      locale: 'sl_SI',
+      symbol: '€',
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -71,7 +76,7 @@ class BillDetailsPage extends HookConsumerWidget {
                           Row(
                             children: [
                               const Text(
-                                'Date: ',
+                                'Date and time: ',
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -87,7 +92,7 @@ class BillDetailsPage extends HookConsumerWidget {
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
-                              Text(bill.price.toStringAsFixed(2)),
+                              Text(priceFormatter.format(bill.price)),
                             ],
                           ),
                           const Text(

@@ -21,18 +21,15 @@ class AuthUtility {
 
   Future<UserCredential?> login(BuildContext context, email, password) async {
     UserCredential? user;
-    try {
-      user = await firebaseAuth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-    } catch (e) {
-      print(e);
-    }
+    user = await firebaseAuth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
     return user;
   }
 
-  Future<UserCredential?> register(BuildContext context, email, password) async {
+  Future<UserCredential?> register(
+      BuildContext context, email, password) async {
     UserCredential? user;
     try {
       user = await firebaseAuth.createUserWithEmailAndPassword(

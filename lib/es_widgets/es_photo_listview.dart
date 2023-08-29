@@ -25,15 +25,6 @@ class ESPhotoListview extends HookConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text(
-            'Images:',
-            style: TextStyle(
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(
-            height: 2,
-          ),
           SizedBox(
             height: 120,
             child: ListView(
@@ -75,7 +66,7 @@ class ESPhotoListview extends HookConsumerWidget {
                                       fit: BoxFit.cover,
                                     ),
                                     border: Border.all(
-                                      color: Colors.grey,
+                                      color: const Color(0xFFFE3F58),
                                       width: 2,
                                     ),
                                   ),
@@ -89,7 +80,7 @@ class ESPhotoListview extends HookConsumerWidget {
                                   width: 30,
                                   child: Container(
                                     decoration: const BoxDecoration(
-                                      color: Colors.grey,
+                                      color: Color(0xFFFE3F58),
                                       borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(10),
                                         bottomRight: Radius.circular(10),
@@ -113,7 +104,6 @@ class ESPhotoListview extends HookConsumerWidget {
                           blurhash: photos[i].blurhash ?? '',
                         ),
                         errorWidget: (context, url, error) {
-                          print(error);
                           return const ESGalleryCard(
                             child: Icon(
                               Icons.error,

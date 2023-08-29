@@ -21,6 +21,7 @@ import 'package:piggy_flow_mobile/providers/shop_provider.dart';
 
 class NewBillPage extends HookConsumerWidget {
   const NewBillPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     useAutomaticKeepAlive(wantKeepAlive: true);
@@ -66,14 +67,44 @@ class NewBillPage extends HookConsumerWidget {
       }
     }
 
+    checkDiscard() {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Are you sure?'),
+            content: const Text('Are you sure you want to discard this bill?'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+                child: const Text('Yes'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+
     return WillPopScope(
       onWillPop: () async {
+        if (page.value == 0) {
+          checkDiscard();
+        } else {
+          pageController.previousPage(
+              duration: slideDuration, curve: slideCurve);
+          page.value--;
+        }
         return false;
-        // return (await showDialog(
-        //       context: context,
-        //       builder: (context) => DiscardDialog(),
-        //     )) ??
-        //     false;
       },
       child: Scaffold(
         body: SafeArea(
@@ -92,8 +123,9 @@ class NewBillPage extends HookConsumerWidget {
                             ? IconButton(
                                 onPressed: () {
                                   pageController.previousPage(
-                                      duration: slideDuration,
-                                      curve: slideCurve);
+                                    duration: slideDuration,
+                                    curve: slideCurve,
+                                  );
                                   page.value--;
                                 },
                                 icon: const Icon(Icons.arrow_back),
@@ -103,7 +135,7 @@ class NewBillPage extends HookConsumerWidget {
                               ),
                         Image.asset('assets/piggy-flow-icon.png'),
                         IconButton(
-                          onPressed: () => Navigator.pop(context),
+                          onPressed: () => checkDiscard(),
                           icon: const Icon(Icons.clear),
                         ),
                       ],
@@ -120,6 +152,7 @@ class NewBillPage extends HookConsumerWidget {
                         buttonLabel: 'CONTINUE',
                         buttonEnabled: priceCtrl.value.text.length > 1,
                         next: () {
+                          FocusManager.instance.primaryFocus?.unfocus();
                           if (formKey.value.currentState!.validate()) {
                             pageController.nextPage(
                                 duration: slideDuration, curve: slideCurve);
@@ -149,13 +182,29 @@ class NewBillPage extends HookConsumerWidget {
                             if (value == '') {
                               priceCtrl.clear;
                             } else {
-                              priceCtrl.value =
-                                  priceCtrl.value.copyWith(text: "$value €");
+                              priceCtrl.value = priceCtrl.value.copyWith(
+                                text: "$value €",
+                              );
                             }
                           },
                           keyboardType: const TextInputType.numberWithOptions(
                             decimal: true,
                           ),
+                          textInputAction: TextInputAction.next,
+                          validator: (String? value) {
+                            if (value == null || value.isEmpty) {
+                              return '';
+                            }
+                            return null;
+                          },
+                          onEditingComplete: () {
+                            FocusManager.instance.primaryFocus?.unfocus();
+                            if (formKey.value.currentState!.validate()) {
+                              pageController.nextPage(
+                                  duration: slideDuration, curve: slideCurve);
+                              page.value++;
+                            }
+                          },
                         ),
                       ),
                       NewBillSlide(
@@ -311,7 +360,7 @@ class NewBillPage extends HookConsumerWidget {
                             // elevated button for adding photos
                             ElevatedButton(
                               onPressed: () {
-                                getImage(ImageSource.gallery);
+                                getImage(ImageSource.camera);
                               },
                               child: const Text('Add a photo'),
                             ),
@@ -324,7 +373,8 @@ class NewBillPage extends HookConsumerWidget {
                         next: () async {
                           newBill.value = newBill.value.copyWith(
                             price: double.parse(
-                                priceCtrl.text.replaceAll('€', '').trim()),
+                              priceCtrl.text.replaceAll('€', '').trim(),
+                            ),
                             comment: commentCtrl.text,
                           );
 
@@ -350,12 +400,13 @@ class NewBillPage extends HookConsumerWidget {
                         child: Column(
                           children: [
                             DateTimePicker(
+                              type: DateTimePickerType.dateTime,
                               initialValue: DateTime.now().toString(),
-                              dateMask: 'dd. MM. yyyy',
+                              dateMask: 'dd. MM. yyyy HH:mm',
                               firstDate: DateTime(2000),
                               lastDate: DateTime(2100),
-                              dateLabelText: 'Date',
-                              onSaved: (String? val) {
+                              dateLabelText: 'Date and time',
+                              onChanged: (String? val) {
                                 if (val != null) {
                                   newBill.value = newBill.value.copyWith(
                                     date: DateTime.parse(val),

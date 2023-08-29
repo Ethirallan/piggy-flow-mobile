@@ -5,11 +5,12 @@ import 'package:piggy_flow_mobile/helpers/swatch_helper.dart';
 import 'package:piggy_flow_mobile/helpers/unfocus.dart';
 import 'package:piggy_flow_mobile/pages/auth/auth_page.dart';
 import 'package:piggy_flow_mobile/pages/auth/confirm_email_page.dart';
-import 'package:piggy_flow_mobile/pages/home/home_page.dart';
-import 'package:piggy_flow_mobile/pages/shop/account_list_page.dart';
-import 'package:piggy_flow_mobile/pages/shop/bill_list_page.dart';
-import 'package:piggy_flow_mobile/pages/shop/category_list_page.dart';
+import 'package:piggy_flow_mobile/pages/bill/bill_list_page.dart';
+import 'package:piggy_flow_mobile/pages/category/category_list_page.dart';
+import 'package:piggy_flow_mobile/pages/setttings/settings_page.dart';
+import 'package:piggy_flow_mobile/pages/account/account_list_page.dart';
 import 'package:piggy_flow_mobile/pages/shop/shop_list_page.dart';
+import 'package:piggy_flow_mobile/pages/statistics/statistic_page.dart';
 import 'package:piggy_flow_mobile/providers/category_provider.dart';
 import 'package:piggy_flow_mobile/providers/es_message_provider.dart';
 import 'package:piggy_flow_mobile/providers/shop_provider.dart';
@@ -79,12 +80,18 @@ class AppState extends ConsumerState<App> {
         ).copyWith(
           secondary: const Color(0xFFBD8180),
         ),
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          backgroundColor: Color(0xFFFE3F58),
+          foregroundColor: Colors.white,
+        ),
       ),
       builder: (context, child) {
         return HookConsumer(
           builder: (BuildContext context, WidgetRef ref, Widget? child) {
-            ref.read(shopProvider);
-            ref.read(categoryProvider);
+            if (ref.read(firebaseAuthProvider).currentUser != null) {
+              ref.read(shopProvider);
+              ref.read(categoryProvider);
+            }
             ref.listen<ESMessage?>(esMessageProvider, (prev, state) {
               if (state != null) {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -114,15 +121,16 @@ class AppState extends ConsumerState<App> {
         '/': (context) => user == null
             ? const AuthPage()
             : user?.emailVerified ?? false
-                ? const HomePage()
+                ? const StatisticsPage()
                 : const ConfirmEmailPage(),
-        'home': (context) => const HomePage(),
+        'statistics': (context) => const StatisticsPage(),
         'auth': (context) => const AuthPage(),
         'confirm_email': (context) => const ConfirmEmailPage(),
         'account_list': (context) => const AccountListPage(),
         'shop_list': (context) => const ShopListPage(),
         'category_list': (context) => const CategoryListPage(),
         'bill_list': (context) => const BillListPage(),
+        'settings': (constext) => const SettingsPage(),
       },
     );
   }

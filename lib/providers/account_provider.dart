@@ -4,15 +4,15 @@ import 'package:piggy_flow_mobile/models/account.dart';
 import 'package:piggy_flow_mobile/providers/http_provider.dart';
 
 final accountProvider =
-    StateNotifierProvider<AccountNotifier, AsyncValue<List<Account>>?>((ref) {
+    StateNotifierProvider<AccountNotifier, List<Account>>((ref) {
   return AccountNotifier(ref.read);
 });
 
-class AccountNotifier extends StateNotifier<AsyncValue<List<Account>>?> {
+class AccountNotifier extends StateNotifier<List<Account>> {
   AccountNotifier(
     this.read, [
-    AsyncValue<List<Account>>? accounts,
-  ]) : super(accounts ?? const AsyncValue.loading()) {
+    List<Account>? accounts,
+  ]) : super(accounts ?? []) {
     getAccounts();
   }
 
@@ -20,11 +20,9 @@ class AccountNotifier extends StateNotifier<AsyncValue<List<Account>>?> {
 
   Future<void> getAccounts() async {
     try {
-      state = AsyncValue.data(
-        await read(httpProvider).getAccountsByUser(),
-      );
+      state = await read(httpProvider).getAccountsByUser();
     } catch (e) {
-      state = AsyncValue.error(e);
+      state = [];
       debugPrint('get accounts $e');
     }
   }

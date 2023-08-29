@@ -4,7 +4,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 class ESStaggeredList extends StatelessWidget {
   final Widget child;
   final int index;
-  ESStaggeredList({required this.child, required this.index});
+  const ESStaggeredList({super.key, required this.child, required this.index});
 
   @override
   Widget build(BuildContext context) {

@@ -49,7 +49,8 @@ class _ConfirmEmailPageState extends ConsumerState<ConfirmEmailPage> {
       ref.read(firebaseAuthProvider).currentUser;
 
       if (!mounted) return;
-      Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
+      Navigator.pushNamedAndRemoveUntil(
+          context, 'statistics', (route) => false);
       ref.read(esMessageProvider.state).state = const ESMessage(
         'Successfully confirmed the email address.',
         Colors.green,
@@ -151,8 +152,8 @@ class _ConfirmEmailPageState extends ConsumerState<ConfirmEmailPage> {
                         (route) => false,
                       );
                     },
-                    child: Row(
-                      children: const [
+                    child: const Row(
+                      children: [
                         Icon(
                           Icons.logout,
                           size: 21,

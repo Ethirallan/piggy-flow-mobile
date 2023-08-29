@@ -74,22 +74,39 @@ class AuthPage extends HookConsumerWidget {
       return null;
     }
 
+    void checkIfConfirmed() async {
+      await ref.read(firebaseAuthProvider).currentUser?.reload();
+      bool? varified =
+          ref.read(firebaseAuthProvider).currentUser?.emailVerified;
+
+      if (!context.mounted) return;
+      if (varified ?? false) {
+        Navigator.pushNamedAndRemoveUntil(
+            context, 'statistics', (route) => false);
+      } else {
+        Navigator.of(context).pushReplacementNamed('confirm_email');
+      }
+    }
+
     return FlutterLogin(
       title: 'Piggy Flow',
       logo: 'assets/piggy-flow-icon.png',
       onLogin: login,
       onSignup: register,
-      onSubmitAnimationCompleted: () {
-        Navigator.of(context).pushReplacementNamed('confirm_email');
-      },
+      onSubmitAnimationCompleted: checkIfConfirmed,
       onRecoverPassword: resetPassword,
       additionalSignupFields: const [
         UserFormField(keyName: 'displayName', displayName: 'Username'),
       ],
       theme: LoginTheme(
         primaryColor: const Color(0xFFFE3F58),
-        switchAuthTextColor: Theme.of(context).primaryColor,
-        // pageColorLight: const Color(0xFFFFF3F2),
+        accentColor: const Color(0xFFFE3F58),
+        pageColorLight: const Color(0xFFFFF3F2),
+        pageColorDark: const Color(0xFFFFF3F2),
+        inputTheme: const InputDecorationTheme(
+          filled: true,
+          fillColor: Color(0xFFFFF3F2),
+        ),
       ),
     );
   }
