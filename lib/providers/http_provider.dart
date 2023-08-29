@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:piggy_flow_mobile/models/account.dart';
 import 'package:piggy_flow_mobile/models/bill.dart';
 import 'package:piggy_flow_mobile/models/category.dart';
+import 'package:piggy_flow_mobile/models/subscription.dart';
 import 'package:piggy_flow_mobile/models/user.dart';
 import 'package:piggy_flow_mobile/providers/firebase_auth_provider.dart';
 import 'package:piggy_flow_mobile/providers/http_client_provider.dart';
@@ -242,6 +243,38 @@ class HttpHelper {
       return true;
     } catch (e) {
       debugPrint('add new bill error: $e');
+      return false;
+    }
+  }
+
+  Future<List<Subscription>> getSubscriptionsByUser() async {
+    List<Subscription> subscriptions = [];
+
+    try {
+      Response response = await http.get(
+        Uri.parse('${dotenv.env['API_URL']}/subscription/getSubscriptionsByUser'),
+      );
+
+      for (var el in jsonDecode(response.body.toString())) {
+        subscriptions.add(Subscription.fromJson(el));
+      }
+    } catch (e) {
+      debugPrint('get subscriptions by user error: $e');
+    }
+
+    return subscriptions;
+  }
+
+  Future<bool> addSubscription(Subscription subscription) async {
+    try {
+      await http.post(
+        Uri.parse('${dotenv.env['API_URL']}/subscription'),
+        headers: headers,
+        body: jsonEncode(subscription.toJson()),
+      );
+      return true;
+    } catch (e) {
+      debugPrint('add new subscription error: $e');
       return false;
     }
   }

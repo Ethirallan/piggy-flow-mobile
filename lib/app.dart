@@ -7,10 +7,11 @@ import 'package:piggy_flow_mobile/pages/auth/auth_page.dart';
 import 'package:piggy_flow_mobile/pages/auth/confirm_email_page.dart';
 import 'package:piggy_flow_mobile/pages/bill/bill_list_page.dart';
 import 'package:piggy_flow_mobile/pages/category/category_list_page.dart';
-import 'package:piggy_flow_mobile/pages/setttings/settings_page.dart';
+import 'package:piggy_flow_mobile/pages/settings/settings_page.dart';
 import 'package:piggy_flow_mobile/pages/account/account_list_page.dart';
 import 'package:piggy_flow_mobile/pages/shop/shop_list_page.dart';
 import 'package:piggy_flow_mobile/pages/statistics/statistic_page.dart';
+import 'package:piggy_flow_mobile/pages/subscription/subscription_list_page.dart';
 import 'package:piggy_flow_mobile/providers/account_provider.dart';
 import 'package:piggy_flow_mobile/providers/category_provider.dart';
 import 'package:piggy_flow_mobile/providers/es_message_provider.dart';
@@ -132,6 +133,7 @@ class AppState extends ConsumerState<App> {
         'shop_list': (context) => const ShopListPage(),
         'category_list': (context) => const CategoryListPage(),
         'bill_list': (context) => const BillListPage(),
+        'subscription_list': (constext) => const SubscriptionListPage(),
         'settings': (constext) => const SettingsPage(),
       },
     );

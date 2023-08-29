@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class NewBillSlide extends StatelessWidget {
-  const NewBillSlide({
+class ESFormSlide extends StatelessWidget {
+  const ESFormSlide({
     Key? key,
     required this.title,
     required this.child,

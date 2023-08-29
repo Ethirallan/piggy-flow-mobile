@@ -45,7 +45,7 @@ class SettingsPage extends HookConsumerWidget {
               leading: const Icon(Icons.subscriptions),
               title: const Text('Subscriptions'),
               onTap: () {
-                Navigator.of(context).pushNamed('statistics');
+                Navigator.of(context).pushNamed('subscription_list');
               },
             ),
           ),

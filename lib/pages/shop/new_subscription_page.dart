@@ -1,33 +1,27 @@
-import 'dart:io';
-
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:piggy_flow_mobile/es_widgets/es_form_slide.dart';
-import 'package:piggy_flow_mobile/es_widgets/es_staggered_grid.dart';
 import 'package:piggy_flow_mobile/models/account.dart';
-import 'package:piggy_flow_mobile/models/bill.dart';
+import 'package:piggy_flow_mobile/models/subscription.dart';
 import 'package:piggy_flow_mobile/models/category.dart';
 import 'package:piggy_flow_mobile/models/shop.dart';
 import 'package:piggy_flow_mobile/providers/account_provider.dart';
-import 'package:piggy_flow_mobile/providers/bill_provider.dart';
+import 'package:piggy_flow_mobile/providers/subscription_provider.dart';
 import 'package:piggy_flow_mobile/providers/category_provider.dart';
 import 'package:piggy_flow_mobile/providers/es_message_provider.dart';
 import 'package:piggy_flow_mobile/providers/http_provider.dart';
-import 'package:piggy_flow_mobile/providers/image_picker_provider.dart';
 import 'package:piggy_flow_mobile/providers/shop_provider.dart';
 
-class NewBillPage extends HookConsumerWidget {
-  const NewBillPage({Key? key}) : super(key: key);
+class NewSubscriptionPage extends HookConsumerWidget {
+  const NewSubscriptionPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     useAutomaticKeepAlive(wantKeepAlive: true);
-    final photos = useState<List<XFile>>([]);
     final pageController = usePageController();
     final page = useState<int>(0);
     const Curve slideCurve = Curves.easeInToLinear;
@@ -35,40 +29,23 @@ class NewBillPage extends HookConsumerWidget {
     final accountList = ref.read(accountProvider);
     final shopList = ref.read(shopProvider);
     final categoryList = ref.read(categoryProvider);
-    final newBill = useState<Bill>(
-      Bill(
-        date: DateTime.now(),
+    final newSubscription = useState<Subscription>(
+      Subscription(
+        chargeDay: DateTime.now().day,
         price: 0.0,
-        comment: '',
+        name: '',
         category: categoryList.first,
         shop: shopList.first,
       ),
     );
-    final priceCtrl = useTextEditingController();
-    final commentCtrl = useTextEditingController(
-      text: newBill.value.comment,
-    );
     final formKey = useState<GlobalKey<FormState>>(GlobalKey<FormState>());
+    final nameCtrl = useTextEditingController(
+      text: newSubscription.value.name,
+    );
+    final priceCtrl = useTextEditingController();
+    useListenable(nameCtrl);
     useListenable(priceCtrl);
     useListenable(pageController);
-
-    Future getImage(ImageSource source) async {
-      if (source == ImageSource.camera) {
-        final XFile? image = await ref.read(imagePickerProvider).takeAPicture();
-        if (image != null) {
-          photos.value = [...photos.value, image];
-        }
-      } else {
-        final List<XFile>? images =
-            await ref.read(imagePickerProvider).selectPhotosFromGallery();
-
-        if (images != null) {
-          for (XFile image in images) {
-            photos.value = [...photos.value, image];
-          }
-        }
-      }
-    }
 
     checkDiscard() {
       showDialog(
@@ -77,7 +54,9 @@ class NewBillPage extends HookConsumerWidget {
         builder: (context) {
           return AlertDialog(
             title: const Text('Are you sure?'),
-            content: const Text('Are you sure you want to discard this bill?'),
+            content: const Text(
+              'Are you sure you want to discard this subscription?',
+            ),
             actions: [
               TextButton(
                 onPressed: () {
@@ -151,7 +130,58 @@ class NewBillPage extends HookConsumerWidget {
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
                       ESFormSlide(
-                        title: 'How much did you spend?',
+                        title: 'How do you want to call this subscription?',
+                        buttonLabel: 'CONTINUE',
+                        buttonEnabled: nameCtrl.value.text.length > 2,
+                        next: () {
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          if (formKey.value.currentState!.validate()) {
+                            pageController.nextPage(
+                              duration: slideDuration,
+                              curve: slideCurve,
+                            );
+                            page.value++;
+                          }
+                        },
+                        child: TextFormField(
+                          controller: nameCtrl,
+                          decoration: const InputDecoration(
+                            labelText: 'Subscription name',
+                            // border: InputBorder.none,
+                          ),
+                          style: const TextStyle(
+                            // fontSize: 50,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          autofocus: true,
+                          onChanged: (String value) {
+                            if (value == '') {
+                              nameCtrl.clear();
+                            } else {
+                              nameCtrl.value = nameCtrl.value.copyWith(
+                                text: value,
+                              );
+                            }
+                          },
+                          textInputAction: TextInputAction.next,
+                          validator: (String? value) {
+                            if (value == null || value.isEmpty || value.length < 3) {
+                              return '';
+                            }
+                            return null;
+                          },
+                          onEditingComplete: () {
+                            FocusManager.instance.primaryFocus?.unfocus();
+                            if (formKey.value.currentState!.validate()) {
+                              pageController.nextPage(
+                                  duration: slideDuration, curve: slideCurve);
+                              page.value++;
+                            }
+                          },
+                        ),
+                      ),
+                      ESFormSlide(
+                        title: 'How much is the cost of subscription?',
                         buttonLabel: 'CONTINUE',
                         buttonEnabled: priceCtrl.value.text.length > 1,
                         next: () {
@@ -183,7 +213,7 @@ class NewBillPage extends HookConsumerWidget {
                           autofocus: true,
                           onChanged: (String value) {
                             if (value == '') {
-                              priceCtrl.clear;
+                              priceCtrl.clear();
                             } else {
                               priceCtrl.value = priceCtrl.value.copyWith(
                                 text: "$value €",
@@ -235,7 +265,8 @@ class NewBillPage extends HookConsumerWidget {
                             ),
                           ),
                           onChanged: (value) {
-                            newBill.value = newBill.value.copyWith(
+                            newSubscription.value =
+                                newSubscription.value.copyWith(
                               account: value == 'Personal'
                                   ? null
                                   : accountList
@@ -245,7 +276,7 @@ class NewBillPage extends HookConsumerWidget {
                             );
                           },
                           selectedItem:
-                              newBill.value.account?.name ?? 'Personal',
+                              newSubscription.value.account?.name ?? 'Personal',
                         ),
                       ),
                       ESFormSlide(
@@ -270,13 +301,15 @@ class NewBillPage extends HookConsumerWidget {
                             ),
                           ),
                           onChanged: (value) {
-                            newBill.value = newBill.value.copyWith(
-                                category: categoryList
-                                    .where((Category category) =>
-                                        category.name == value)
-                                    .first);
+                            newSubscription.value = newSubscription.value
+                                .copyWith(
+                                    category: categoryList
+                                        .where((Category category) =>
+                                            category.name == value)
+                                        .first);
                           },
-                          selectedItem: newBill.value.category?.name ?? '',
+                          selectedItem:
+                              newSubscription.value.category?.name ?? '',
                         ),
                       ),
                       ESFormSlide(
@@ -300,140 +333,45 @@ class NewBillPage extends HookConsumerWidget {
                             ),
                           ),
                           onChanged: (value) {
-                            newBill.value = newBill.value.copyWith(
-                                shop: shopList
-                                    .where((Shop shop) => shop.name == value)
-                                    .first);
+                            newSubscription.value = newSubscription.value
+                                .copyWith(
+                                    shop: shopList
+                                        .where(
+                                            (Shop shop) => shop.name == value)
+                                        .first);
                           },
-                          selectedItem: newBill.value.shop?.name ?? '',
+                          selectedItem: newSubscription.value.shop?.name ?? '',
                         ),
                       ),
                       ESFormSlide(
-                        title: 'Photos',
-                        buttonLabel: 'CONTINUE',
-                        next: () {
-                          pageController.nextPage(
-                              duration: slideDuration, curve: slideCurve);
-                          page.value++;
-                        },
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            if (photos.value.isNotEmpty) const Text('Photos:'),
-                            if (photos.value.isNotEmpty)
-                              const SizedBox(
-                                height: 10,
-                              ),
-                            if (photos.value.isNotEmpty)
-                              SizedBox(
-                                height: 120,
-                                child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: photos.value.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return ESStaggeredGrid(
-                                      index: index,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(4),
-                                        child: Stack(
-                                          children: [
-                                            SizedBox(
-                                              height: 110,
-                                              width: 110,
-                                              child: Card(
-                                                elevation: 4,
-                                                shape:
-                                                    const RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                    Radius.circular(15),
-                                                  ),
-                                                ),
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      const BorderRadius.all(
-                                                    Radius.circular(15),
-                                                  ),
-                                                  child: Image.file(
-                                                    File(photos
-                                                        .value[index].path),
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            Positioned(
-                                              right: 4,
-                                              top: 4,
-                                              child: Container(
-                                                height: 30,
-                                                width: 30,
-                                                decoration: const BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                ),
-                                                child: IconButton(
-                                                  icon: const Icon(
-                                                    Icons.clear,
-                                                    size: 20,
-                                                  ),
-                                                  padding: EdgeInsets.zero,
-                                                  onPressed: () {
-                                                    photos.value
-                                                        .removeAt(index);
-                                                    var temp = photos.value;
-                                                    photos.value = [];
-                                                    photos.value = temp;
-                                                  },
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            // elevated button for adding photos
-                            ElevatedButton(
-                              onPressed: () {
-                                getImage(ImageSource.camera);
-                              },
-                              child: const Text('Add a photo'),
-                            ),
-                          ],
-                        ),
-                      ),
-                      ESFormSlide(
-                        title: 'Date and comment',
+                        title: 'When is the next charge day?',
                         buttonLabel: 'Save',
                         next: () async {
-                          newBill.value = newBill.value.copyWith(
+                          newSubscription.value =
+                              newSubscription.value.copyWith(
                             price: double.parse(
                               priceCtrl.text.replaceAll('€', '').trim(),
                             ),
-                            comment: commentCtrl.text,
+                            name: nameCtrl.text,
                           );
 
                           bool success = await ref
                               .read(httpProvider)
-                              .addBill(newBill.value, photos.value);
+                              .addSubscription(newSubscription.value);
                           if (success) {
                             ref.read(esMessageProvider.state).state =
                                 const ESMessage(
-                              'Successfuly added new bill',
+                              'Successfuly added new subscription',
                               Colors.green,
                             );
-                            ref.read(billProvider.notifier).getBills();
+                            ref
+                                .read(subscriptionProvider.notifier)
+                                .getSubscriptions();
                             if (context.mounted) Navigator.pop(context);
                           } else {
                             ref.read(esMessageProvider.state).state =
                                 const ESMessage(
-                              'Error creating new bill',
+                              'Error creating new subscription',
                               Colors.red,
                             );
                           }
@@ -441,29 +379,20 @@ class NewBillPage extends HookConsumerWidget {
                         child: Column(
                           children: [
                             DateTimePicker(
-                              type: DateTimePickerType.dateTime,
+                              type: DateTimePickerType.date,
                               initialValue: DateTime.now().toString(),
-                              dateMask: 'dd. MM. yyyy HH:mm',
+                              dateMask: 'dd. MM. yyyy',
                               firstDate: DateTime(2000),
                               lastDate: DateTime(2100),
-                              dateLabelText: 'Date and time',
+                              dateLabelText: 'Next charge date',
                               onChanged: (String? val) {
                                 if (val != null) {
-                                  newBill.value = newBill.value.copyWith(
-                                    date: DateTime.parse(val),
+                                  newSubscription.value =
+                                      newSubscription.value.copyWith(
+                                    chargeDay: DateTime.parse(val).day,
                                   );
                                 }
                               },
-                            ),
-                            TextFormField(
-                              controller: commentCtrl,
-                              minLines: 1,
-                              maxLines: 30,
-                              keyboardType: TextInputType.multiline,
-                              decoration: const InputDecoration(
-                                labelText: 'Notes',
-                                hintText: 'Add notes',
-                              ),
                             ),
                           ],
                         ),

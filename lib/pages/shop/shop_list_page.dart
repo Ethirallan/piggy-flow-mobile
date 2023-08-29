@@ -14,7 +14,7 @@ class ShopListPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     useAutomaticKeepAlive(wantKeepAlive: true);
     final shops = ref.watch(shopProvider);
-    final newShowNameController = useTextEditingController();
+    final newShopNameController = useTextEditingController();
 
     return Scaffold(
       appBar: AppBar(
@@ -67,11 +67,11 @@ class ShopListPage extends HookConsumerWidget {
             barrierDismissible: false,
             builder: (context) {
               return ESNewItemAlertDialog(
-                controller: newShowNameController,
+                controller: newShopNameController,
                 title: 'Add new show',
                 label: 'Shop name',
                 onSave: () async {
-                  Shop shop = Shop(name: newShowNameController.text);
+                  Shop shop = Shop(name: newShopNameController.text);
                   bool success = await ref.read(httpProvider).addShop(shop);
                   if (success) {
                     ref.read(esMessageProvider.state).state = ESMessage(
