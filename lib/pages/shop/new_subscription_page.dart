@@ -34,8 +34,8 @@ class NewSubscriptionPage extends HookConsumerWidget {
         chargeDay: DateTime.now().day,
         price: 0.0,
         name: '',
-        category: categoryList.first,
-        shop: shopList.first,
+        // category: categoryList.first,
+        // shop: shopList.first,
       ),
     );
     final formKey = useState<GlobalKey<FormState>>(GlobalKey<FormState>());

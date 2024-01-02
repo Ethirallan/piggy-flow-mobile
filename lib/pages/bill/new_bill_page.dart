@@ -40,8 +40,8 @@ class NewBillPage extends HookConsumerWidget {
         date: DateTime.now(),
         price: 0.0,
         comment: '',
-        category: categoryList.first,
-        shop: shopList.first,
+        // category: categoryList.first,
+        // shop: shopList.first,
       ),
     );
     final priceCtrl = useTextEditingController();
