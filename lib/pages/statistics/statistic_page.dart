@@ -3,9 +3,11 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:piggy_flow_mobile/models/account.dart';
 import 'package:piggy_flow_mobile/models/bill.dart';
 import 'package:piggy_flow_mobile/models/category.dart';
 import 'package:piggy_flow_mobile/pages/bill/new_bill_page.dart';
+import 'package:piggy_flow_mobile/providers/account_provider.dart';
 import 'package:piggy_flow_mobile/providers/bill_provider.dart';
 import 'package:piggy_flow_mobile/providers/category_provider.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -18,6 +20,7 @@ class StatisticsPage extends HookConsumerWidget {
     useAutomaticKeepAlive(wantKeepAlive: true);
     final dateformat = DateFormat('MMMM yyyy');
 
+    final selectedAccount = useState<Account?>(null);
     final selectedMonth = useState(DateTime.now());
     final touchedIndex = useState(-1);
     final displayedCategories = useState<List<Category>>([]);
@@ -33,6 +36,9 @@ class StatisticsPage extends HookConsumerWidget {
     double calcSum(List<Bill> bills, int categoryId) {
       double sum = 0;
       for (Bill bill in bills.where((Bill bill) =>
+          (selectedAccount.value == null
+              ? true
+              : bill.account?.id == selectedAccount.value?.id) &&
           (categoryId == 0 ? true : bill.category?.id == categoryId) &&
           bill.date.month == selectedMonth.value.month &&
           bill.date.year == selectedMonth.value.year)) {
@@ -47,6 +53,9 @@ class StatisticsPage extends HookConsumerWidget {
       }
       double total = 0;
       for (Bill bill in bills.where((Bill bill) =>
+          (selectedAccount.value == null
+              ? true
+              : bill.account?.id == selectedAccount.value?.id) &&
           bill.date.month == selectedMonth.value.month &&
           bill.date.year == selectedMonth.value.year)) {
         total += bill.price;
@@ -92,6 +101,31 @@ class StatisticsPage extends HookConsumerWidget {
             onPressed: () => Navigator.of(context).pushNamed('bill_list'),
             icon: const Icon(Icons.history),
           ),
+          PopupMenuButton(
+            itemBuilder: (context) {
+              return [
+                PopupMenuItem(
+                  onTap: () {
+                    selectedAccount.value = null;
+                    displayedCategories.value = [];
+                    chartItems.value = [];
+                  },
+                  child: const Text('All'),
+                ),
+                for (Account account in ref.read(accountProvider))
+                  PopupMenuItem(
+                    onTap: () {
+                      selectedAccount.value = account;
+                      displayedCategories.value = [];
+                      chartItems.value = [];
+                    },
+                    child: Text(
+                      account.name.toString(),
+                    ),
+                  ),
+              ];
+            },
+          ),
         ],
       ),
       body: Builder(
@@ -130,6 +164,18 @@ class StatisticsPage extends HookConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
+                        Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Text(
+                            selectedAccount.value?.name.toString() ?? 'All',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFFBD8180),
+                              fontSize: 20,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                         Padding(
                           padding: const EdgeInsets.all(16),
                           child: Row(
@@ -195,8 +241,10 @@ class StatisticsPage extends HookConsumerWidget {
                           ),
                         ),
                         if (displayedCategories.value.isEmpty)
-                          const Center(
-                            child: Text('No data for this month'),
+                          Center(
+                            child: Text(
+                              'No data for ${selectedAccount.value?.name ?? 'any account'} this month',
+                            ),
                           ),
                         if (displayedCategories.value.isNotEmpty)
                           Expanded(
