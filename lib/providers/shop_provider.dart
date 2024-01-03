@@ -18,7 +18,6 @@ class ShopNotifier extends StateNotifier<List<Shop>> {
   final Reader read;
 
   Future<void> getShops() async {
-    print('--------- shopping ---------');
     try {
       state = await read(httpProvider).getShopsByUser();
     } catch (e) {
