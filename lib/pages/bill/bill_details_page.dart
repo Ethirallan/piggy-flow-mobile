@@ -4,6 +4,8 @@ import 'package:piggy_flow_mobile/es_widgets/es_photo_listview.dart';
 import 'package:piggy_flow_mobile/models/bill.dart';
 import 'package:intl/intl.dart';
 import 'package:piggy_flow_mobile/providers/bill_details_provider.dart';
+import 'package:piggy_flow_mobile/providers/bill_provider.dart';
+import 'package:piggy_flow_mobile/providers/http_provider.dart';
 
 class BillDetailsPage extends HookConsumerWidget {
   const BillDetailsPage({
@@ -28,6 +30,46 @@ class BillDetailsPage extends HookConsumerWidget {
           'Bill details',
           style: TextStyle(),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text('Are you sure?'),
+                    content: const Text(
+                        'Are you sure you want to delete this bill?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          bool success =
+                              await ref.read(httpProvider).deleteBill(billId);
+                          if (context.mounted) {
+                            if (success) {
+                              ref.read(billProvider.notifier).getBills();
+                              Navigator.pop(context);
+                            }
+                            Navigator.pop(context);
+                          }
+                        },
+                        child: const Text('Yes'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            icon: const Icon(Icons.delete),
+          ),
+        ],
       ),
       body: SafeArea(
         child: Builder(

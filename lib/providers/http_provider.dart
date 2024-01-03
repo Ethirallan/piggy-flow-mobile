@@ -247,12 +247,25 @@ class HttpHelper {
     }
   }
 
+  Future<bool> deleteBill(int id) async {
+    try {
+      await http.delete(
+        Uri.parse('${dotenv.env['API_URL']}/bill/$id'),
+      );
+      return true;
+    } catch (e) {
+      debugPrint('delete bill $id error: $e');
+    }
+    return false;
+  }
+
   Future<List<Subscription>> getSubscriptionsByUser() async {
     List<Subscription> subscriptions = [];
 
     try {
       Response response = await http.get(
-        Uri.parse('${dotenv.env['API_URL']}/subscription/getSubscriptionsByUser'),
+        Uri.parse(
+            '${dotenv.env['API_URL']}/subscription/getSubscriptionsByUser'),
       );
 
       for (var el in jsonDecode(response.body.toString())) {
