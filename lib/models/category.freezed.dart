@@ -22,6 +22,7 @@ Category _$CategoryFromJson(Map<String, dynamic> json) {
 mixin _$Category {
   int? get id => throw _privateConstructorUsedError;
   User? get user => throw _privateConstructorUsedError;
+  Account? get account => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get emoji => throw _privateConstructorUsedError;
 
@@ -36,9 +37,10 @@ abstract class $CategoryCopyWith<$Res> {
   factory $CategoryCopyWith(Category value, $Res Function(Category) then) =
       _$CategoryCopyWithImpl<$Res, Category>;
   @useResult
-  $Res call({int? id, User? user, String name, String emoji});
+  $Res call({int? id, User? user, Account? account, String name, String emoji});
 
   $UserCopyWith<$Res>? get user;
+  $AccountCopyWith<$Res>? get account;
 }
 
 /// @nodoc
@@ -56,6 +58,7 @@ class _$CategoryCopyWithImpl<$Res, $Val extends Category>
   $Res call({
     Object? id = freezed,
     Object? user = freezed,
+    Object? account = freezed,
     Object? name = null,
     Object? emoji = null,
   }) {
@@ -68,6 +71,10 @@ class _$CategoryCopyWithImpl<$Res, $Val extends Category>
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
               as User?,
+      account: freezed == account
+          ? _value.account
+          : account // ignore: cast_nullable_to_non_nullable
+              as Account?,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -90,6 +97,18 @@ class _$CategoryCopyWithImpl<$Res, $Val extends Category>
       return _then(_value.copyWith(user: value) as $Val);
     });
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $AccountCopyWith<$Res>? get account {
+    if (_value.account == null) {
+      return null;
+    }
+
+    return $AccountCopyWith<$Res>(_value.account!, (value) {
+      return _then(_value.copyWith(account: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -100,10 +119,12 @@ abstract class _$$CategoryImplCopyWith<$Res>
       __$$CategoryImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int? id, User? user, String name, String emoji});
+  $Res call({int? id, User? user, Account? account, String name, String emoji});
 
   @override
   $UserCopyWith<$Res>? get user;
+  @override
+  $AccountCopyWith<$Res>? get account;
 }
 
 /// @nodoc
@@ -119,6 +140,7 @@ class __$$CategoryImplCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? user = freezed,
+    Object? account = freezed,
     Object? name = null,
     Object? emoji = null,
   }) {
@@ -131,6 +153,10 @@ class __$$CategoryImplCopyWithImpl<$Res>
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
               as User?,
+      account: freezed == account
+          ? _value.account
+          : account // ignore: cast_nullable_to_non_nullable
+              as Account?,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -147,7 +173,12 @@ class __$$CategoryImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$CategoryImpl extends _Category with DiagnosticableTreeMixin {
-  _$CategoryImpl({this.id, this.user, required this.name, required this.emoji})
+  _$CategoryImpl(
+      {this.id,
+      this.user,
+      this.account,
+      required this.name,
+      required this.emoji})
       : super._();
 
   factory _$CategoryImpl.fromJson(Map<String, dynamic> json) =>
@@ -158,13 +189,15 @@ class _$CategoryImpl extends _Category with DiagnosticableTreeMixin {
   @override
   final User? user;
   @override
+  final Account? account;
+  @override
   final String name;
   @override
   final String emoji;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Category(id: $id, user: $user, name: $name, emoji: $emoji)';
+    return 'Category(id: $id, user: $user, account: $account, name: $name, emoji: $emoji)';
   }
 
   @override
@@ -174,6 +207,7 @@ class _$CategoryImpl extends _Category with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('type', 'Category'))
       ..add(DiagnosticsProperty('id', id))
       ..add(DiagnosticsProperty('user', user))
+      ..add(DiagnosticsProperty('account', account))
       ..add(DiagnosticsProperty('name', name))
       ..add(DiagnosticsProperty('emoji', emoji));
   }
@@ -185,13 +219,14 @@ class _$CategoryImpl extends _Category with DiagnosticableTreeMixin {
             other is _$CategoryImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.user, user) || other.user == user) &&
+            (identical(other.account, account) || other.account == account) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.emoji, emoji) || other.emoji == emoji));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, user, name, emoji);
+  int get hashCode => Object.hash(runtimeType, id, user, account, name, emoji);
 
   @JsonKey(ignore: true)
   @override
@@ -211,6 +246,7 @@ abstract class _Category extends Category {
   factory _Category(
       {final int? id,
       final User? user,
+      final Account? account,
       required final String name,
       required final String emoji}) = _$CategoryImpl;
   _Category._() : super._();
@@ -222,6 +258,8 @@ abstract class _Category extends Category {
   int? get id;
   @override
   User? get user;
+  @override
+  Account? get account;
   @override
   String get name;
   @override

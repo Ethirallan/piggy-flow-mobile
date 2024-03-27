@@ -24,6 +24,8 @@ mixin _$Account {
   String get name => throw _privateConstructorUsedError;
   List<User> get users => throw _privateConstructorUsedError;
   List<Bill> get bills => throw _privateConstructorUsedError;
+  List<Shop> get shops => throw _privateConstructorUsedError;
+  List<Category> get categories => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +37,13 @@ abstract class $AccountCopyWith<$Res> {
   factory $AccountCopyWith(Account value, $Res Function(Account) then) =
       _$AccountCopyWithImpl<$Res, Account>;
   @useResult
-  $Res call({int? id, String name, List<User> users, List<Bill> bills});
+  $Res call(
+      {int? id,
+      String name,
+      List<User> users,
+      List<Bill> bills,
+      List<Shop> shops,
+      List<Category> categories});
 }
 
 /// @nodoc
@@ -55,6 +63,8 @@ class _$AccountCopyWithImpl<$Res, $Val extends Account>
     Object? name = null,
     Object? users = null,
     Object? bills = null,
+    Object? shops = null,
+    Object? categories = null,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -73,6 +83,14 @@ class _$AccountCopyWithImpl<$Res, $Val extends Account>
           ? _value.bills
           : bills // ignore: cast_nullable_to_non_nullable
               as List<Bill>,
+      shops: null == shops
+          ? _value.shops
+          : shops // ignore: cast_nullable_to_non_nullable
+              as List<Shop>,
+      categories: null == categories
+          ? _value.categories
+          : categories // ignore: cast_nullable_to_non_nullable
+              as List<Category>,
     ) as $Val);
   }
 }
@@ -84,7 +102,13 @@ abstract class _$$AccountImplCopyWith<$Res> implements $AccountCopyWith<$Res> {
       __$$AccountImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int? id, String name, List<User> users, List<Bill> bills});
+  $Res call(
+      {int? id,
+      String name,
+      List<User> users,
+      List<Bill> bills,
+      List<Shop> shops,
+      List<Category> categories});
 }
 
 /// @nodoc
@@ -102,6 +126,8 @@ class __$$AccountImplCopyWithImpl<$Res>
     Object? name = null,
     Object? users = null,
     Object? bills = null,
+    Object? shops = null,
+    Object? categories = null,
   }) {
     return _then(_$AccountImpl(
       id: freezed == id
@@ -120,6 +146,14 @@ class __$$AccountImplCopyWithImpl<$Res>
           ? _value._bills
           : bills // ignore: cast_nullable_to_non_nullable
               as List<Bill>,
+      shops: null == shops
+          ? _value._shops
+          : shops // ignore: cast_nullable_to_non_nullable
+              as List<Shop>,
+      categories: null == categories
+          ? _value._categories
+          : categories // ignore: cast_nullable_to_non_nullable
+              as List<Category>,
     ));
   }
 }
@@ -127,14 +161,18 @@ class __$$AccountImplCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(explicitToJson: true)
-class _$AccountImpl extends _Account with DiagnosticableTreeMixin {
+class _$AccountImpl extends _Account {
   _$AccountImpl(
       {this.id,
       required this.name,
       final List<User> users = const [],
-      final List<Bill> bills = const []})
+      final List<Bill> bills = const [],
+      final List<Shop> shops = const [],
+      final List<Category> categories = const []})
       : _users = users,
         _bills = bills,
+        _shops = shops,
+        _categories = categories,
         super._();
 
   factory _$AccountImpl.fromJson(Map<String, dynamic> json) =>
@@ -162,20 +200,27 @@ class _$AccountImpl extends _Account with DiagnosticableTreeMixin {
     return EqualUnmodifiableListView(_bills);
   }
 
+  final List<Shop> _shops;
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Account(id: $id, name: $name, users: $users, bills: $bills)';
+  @JsonKey()
+  List<Shop> get shops {
+    if (_shops is EqualUnmodifiableListView) return _shops;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_shops);
+  }
+
+  final List<Category> _categories;
+  @override
+  @JsonKey()
+  List<Category> get categories {
+    if (_categories is EqualUnmodifiableListView) return _categories;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_categories);
   }
 
   @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'Account'))
-      ..add(DiagnosticsProperty('id', id))
-      ..add(DiagnosticsProperty('name', name))
-      ..add(DiagnosticsProperty('users', users))
-      ..add(DiagnosticsProperty('bills', bills));
+  String toString() {
+    return 'Account(id: $id, name: $name, users: $users, bills: $bills, shops: $shops, categories: $categories)';
   }
 
   @override
@@ -186,7 +231,10 @@ class _$AccountImpl extends _Account with DiagnosticableTreeMixin {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             const DeepCollectionEquality().equals(other._users, _users) &&
-            const DeepCollectionEquality().equals(other._bills, _bills));
+            const DeepCollectionEquality().equals(other._bills, _bills) &&
+            const DeepCollectionEquality().equals(other._shops, _shops) &&
+            const DeepCollectionEquality()
+                .equals(other._categories, _categories));
   }
 
   @JsonKey(ignore: true)
@@ -196,7 +244,9 @@ class _$AccountImpl extends _Account with DiagnosticableTreeMixin {
       id,
       name,
       const DeepCollectionEquality().hash(_users),
-      const DeepCollectionEquality().hash(_bills));
+      const DeepCollectionEquality().hash(_bills),
+      const DeepCollectionEquality().hash(_shops),
+      const DeepCollectionEquality().hash(_categories));
 
   @JsonKey(ignore: true)
   @override
@@ -217,7 +267,9 @@ abstract class _Account extends Account {
       {final int? id,
       required final String name,
       final List<User> users,
-      final List<Bill> bills}) = _$AccountImpl;
+      final List<Bill> bills,
+      final List<Shop> shops,
+      final List<Category> categories}) = _$AccountImpl;
   _Account._() : super._();
 
   factory _Account.fromJson(Map<String, dynamic> json) = _$AccountImpl.fromJson;
@@ -230,6 +282,10 @@ abstract class _Account extends Account {
   List<User> get users;
   @override
   List<Bill> get bills;
+  @override
+  List<Shop> get shops;
+  @override
+  List<Category> get categories;
   @override
   @JsonKey(ignore: true)
   _$$AccountImplCopyWith<_$AccountImpl> get copyWith =>

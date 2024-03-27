@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
+import 'package:piggy_flow_mobile/models/account.dart';
 import 'package:piggy_flow_mobile/models/user.dart';
 
 part 'shop.freezed.dart';
@@ -13,6 +14,7 @@ abstract class Shop implements _$Shop {
   factory Shop({
     int? id,
     User? user,
+    Account? account,
     required String name,
   }) = _Shop;
 

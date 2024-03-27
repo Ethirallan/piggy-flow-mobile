@@ -22,6 +22,7 @@ Shop _$ShopFromJson(Map<String, dynamic> json) {
 mixin _$Shop {
   int? get id => throw _privateConstructorUsedError;
   User? get user => throw _privateConstructorUsedError;
+  Account? get account => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -34,9 +35,10 @@ abstract class $ShopCopyWith<$Res> {
   factory $ShopCopyWith(Shop value, $Res Function(Shop) then) =
       _$ShopCopyWithImpl<$Res, Shop>;
   @useResult
-  $Res call({int? id, User? user, String name});
+  $Res call({int? id, User? user, Account? account, String name});
 
   $UserCopyWith<$Res>? get user;
+  $AccountCopyWith<$Res>? get account;
 }
 
 /// @nodoc
@@ -54,6 +56,7 @@ class _$ShopCopyWithImpl<$Res, $Val extends Shop>
   $Res call({
     Object? id = freezed,
     Object? user = freezed,
+    Object? account = freezed,
     Object? name = null,
   }) {
     return _then(_value.copyWith(
@@ -65,6 +68,10 @@ class _$ShopCopyWithImpl<$Res, $Val extends Shop>
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
               as User?,
+      account: freezed == account
+          ? _value.account
+          : account // ignore: cast_nullable_to_non_nullable
+              as Account?,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -83,6 +90,18 @@ class _$ShopCopyWithImpl<$Res, $Val extends Shop>
       return _then(_value.copyWith(user: value) as $Val);
     });
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $AccountCopyWith<$Res>? get account {
+    if (_value.account == null) {
+      return null;
+    }
+
+    return $AccountCopyWith<$Res>(_value.account!, (value) {
+      return _then(_value.copyWith(account: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -92,10 +111,12 @@ abstract class _$$ShopImplCopyWith<$Res> implements $ShopCopyWith<$Res> {
       __$$ShopImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int? id, User? user, String name});
+  $Res call({int? id, User? user, Account? account, String name});
 
   @override
   $UserCopyWith<$Res>? get user;
+  @override
+  $AccountCopyWith<$Res>? get account;
 }
 
 /// @nodoc
@@ -110,6 +131,7 @@ class __$$ShopImplCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? user = freezed,
+    Object? account = freezed,
     Object? name = null,
   }) {
     return _then(_$ShopImpl(
@@ -121,6 +143,10 @@ class __$$ShopImplCopyWithImpl<$Res>
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
               as User?,
+      account: freezed == account
+          ? _value.account
+          : account // ignore: cast_nullable_to_non_nullable
+              as Account?,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -133,7 +159,8 @@ class __$$ShopImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$ShopImpl extends _Shop with DiagnosticableTreeMixin {
-  _$ShopImpl({this.id, this.user, required this.name}) : super._();
+  _$ShopImpl({this.id, this.user, this.account, required this.name})
+      : super._();
 
   factory _$ShopImpl.fromJson(Map<String, dynamic> json) =>
       _$$ShopImplFromJson(json);
@@ -143,11 +170,13 @@ class _$ShopImpl extends _Shop with DiagnosticableTreeMixin {
   @override
   final User? user;
   @override
+  final Account? account;
+  @override
   final String name;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Shop(id: $id, user: $user, name: $name)';
+    return 'Shop(id: $id, user: $user, account: $account, name: $name)';
   }
 
   @override
@@ -157,6 +186,7 @@ class _$ShopImpl extends _Shop with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('type', 'Shop'))
       ..add(DiagnosticsProperty('id', id))
       ..add(DiagnosticsProperty('user', user))
+      ..add(DiagnosticsProperty('account', account))
       ..add(DiagnosticsProperty('name', name));
   }
 
@@ -167,12 +197,13 @@ class _$ShopImpl extends _Shop with DiagnosticableTreeMixin {
             other is _$ShopImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.user, user) || other.user == user) &&
+            (identical(other.account, account) || other.account == account) &&
             (identical(other.name, name) || other.name == name));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, user, name);
+  int get hashCode => Object.hash(runtimeType, id, user, account, name);
 
   @JsonKey(ignore: true)
   @override
@@ -189,8 +220,11 @@ class _$ShopImpl extends _Shop with DiagnosticableTreeMixin {
 }
 
 abstract class _Shop extends Shop {
-  factory _Shop({final int? id, final User? user, required final String name}) =
-      _$ShopImpl;
+  factory _Shop(
+      {final int? id,
+      final User? user,
+      final Account? account,
+      required final String name}) = _$ShopImpl;
   _Shop._() : super._();
 
   factory _Shop.fromJson(Map<String, dynamic> json) = _$ShopImpl.fromJson;
@@ -199,6 +233,8 @@ abstract class _Shop extends Shop {
   int? get id;
   @override
   User? get user;
+  @override
+  Account? get account;
   @override
   String get name;
   @override

@@ -12,6 +12,9 @@ _$CategoryImpl _$$CategoryImplFromJson(Map<String, dynamic> json) =>
       user: json['user'] == null
           ? null
           : User.fromJson(json['user'] as Map<String, dynamic>),
+      account: json['account'] == null
+          ? null
+          : Account.fromJson(json['account'] as Map<String, dynamic>),
       name: json['name'] as String,
       emoji: json['emoji'] as String,
     );
@@ -20,6 +23,7 @@ Map<String, dynamic> _$$CategoryImplToJson(_$CategoryImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'user': instance.user?.toJson(),
+      'account': instance.account?.toJson(),
       'name': instance.name,
       'emoji': instance.emoji,
     };

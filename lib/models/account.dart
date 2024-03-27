@@ -1,7 +1,9 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:flutter/foundation.dart';
 import 'package:piggy_flow_mobile/models/bill.dart';
+import 'package:piggy_flow_mobile/models/shop.dart';
 import 'package:piggy_flow_mobile/models/user.dart';
+import 'package:piggy_flow_mobile/models/category.dart';
+
 
 part 'account.freezed.dart';
 part 'account.g.dart';
@@ -16,6 +18,8 @@ abstract class Account implements _$Account {
     required String name,
     @Default([]) List<User> users,
     @Default([]) List<Bill> bills,
+    @Default([]) List<Shop> shops,
+    @Default([]) List<Category> categories,
   }) = _Account;
 
   factory Account.fromJson(Map<String, dynamic> json) => _$AccountFromJson(json);
