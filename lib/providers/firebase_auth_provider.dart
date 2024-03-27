@@ -37,7 +37,7 @@ class AuthUtility {
         password: password,
       );
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
     return user;
   }
@@ -47,7 +47,7 @@ class AuthUtility {
       firebaseAuth.signOut();
       return true;
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
       return false;
     }
   }
@@ -57,7 +57,7 @@ class AuthUtility {
       firebaseAuth.currentUser?.sendEmailVerification();
       return true;
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
       return false;
     }
   }
@@ -67,7 +67,7 @@ class AuthUtility {
       firebaseAuth.sendPasswordResetEmail(email: email);
       return true;
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
       return false;
     }
   }
@@ -77,19 +77,19 @@ class AuthUtility {
       firebaseAuth.currentUser?.updateDisplayName(name);
       return true;
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
       return false;
     }
   }
 
   Future<String> getToken() async {
-    String token = '';
+    String? token = '';
     try {
       token = await firebaseAuth.currentUser!.getIdToken();
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
-    return token;
+    return token ?? '';
   }
 
   User? getCurrentUser() {
@@ -97,7 +97,7 @@ class AuthUtility {
     try {
       user = firebaseAuth.currentUser;
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
     return user;
   }
@@ -106,7 +106,7 @@ class AuthUtility {
     try {
       firebaseAuth.currentUser?.delete();
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 }

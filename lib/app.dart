@@ -20,7 +20,7 @@ import 'package:piggy_flow_mobile/providers/shop_provider.dart';
 import 'providers/firebase_auth_provider.dart';
 
 class App extends ConsumerStatefulWidget {
-  const App({Key? key}) : super(key: key);
+  const App({super.key});
 
   @override
   AppState createState() => AppState();

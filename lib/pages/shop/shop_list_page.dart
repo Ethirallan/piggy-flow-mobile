@@ -8,7 +8,7 @@ import 'package:piggy_flow_mobile/providers/http_provider.dart';
 import 'package:piggy_flow_mobile/providers/shop_provider.dart';
 
 class ShopListPage extends HookConsumerWidget {
-  const ShopListPage({Key? key}) : super(key: key);
+  const ShopListPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

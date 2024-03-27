@@ -106,7 +106,6 @@ class HttpHelper {
       for (var el in jsonDecode(response.body.toString())) {
         shops.add(Shop.fromJson(el));
       }
-      debugPrint(shops.length.toString());
     } catch (e) {
       debugPrint('get shops by user error: $e');
     }
@@ -139,7 +138,6 @@ class HttpHelper {
       for (var el in jsonDecode(response.body.toString())) {
         categories.add(Category.fromJson(el));
       }
-      debugPrint(categories.length.toString());
     } catch (e) {
       debugPrint('get categories by user error: $e');
     }
@@ -149,12 +147,15 @@ class HttpHelper {
 
   Future<bool> addCategory(Category category) async {
     try {
-      await http.post(
+      var res = await http.post(
         Uri.parse('${dotenv.env['API_URL']}/category'),
         headers: headers,
         body: jsonEncode(category.toJson()),
       );
-      return true;
+      if (res.statusCode == 200 || res.statusCode == 201) {
+        return true;
+      }
+      return false;
     } catch (e) {
       debugPrint('add new category error: $e');
       return false;
@@ -199,7 +200,6 @@ class HttpHelper {
       Response response = await http.get(
         Uri.parse('${dotenv.env['API_URL']}/bill/getBillDetails/$id'),
       );
-      debugPrint(response.body);
       bill = Bill.fromJson(jsonDecode(response.body.toString()));
     } catch (e) {
       debugPrint('get bills by id error: $e');
@@ -211,7 +211,6 @@ class HttpHelper {
   Future<bool> addBill(Bill bill, List<XFile> photos) async {
     try {
       Uri url = Uri.parse('${dotenv.env['API_URL']}/bill');
-      debugPrint(bill.toJson().toString());
       if (photos.isEmpty) {
         await http.post(
           url,

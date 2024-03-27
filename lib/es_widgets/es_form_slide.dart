@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class ESFormSlide extends StatelessWidget {
   const ESFormSlide({
-    Key? key,
+    super.key,
     required this.title,
     required this.child,
     required this.next,
     this.buttonEnabled = true,
     required this.buttonLabel,
-  }) : super(key: key);
+  });
 
   final String title;
   final Widget child;

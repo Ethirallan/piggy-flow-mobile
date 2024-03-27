@@ -5,26 +5,26 @@ import 'package:piggy_flow_mobile/providers/http_provider.dart';
 
 final billProvider =
     StateNotifierProvider<BillNotifier, AsyncValue<List<Bill>>?>((ref) {
-  return BillNotifier(ref.read);
+  return BillNotifier(ref);
 });
 
 class BillNotifier extends StateNotifier<AsyncValue<List<Bill>>?> {
   BillNotifier(
-    this.read, [
+    this.ref, [
     AsyncValue<List<Bill>>? bills,
   ]) : super(bills ?? const AsyncValue.loading()) {
     getBills();
   }
 
-  final Reader read;
+  final Ref ref;
 
   Future<void> getBills() async {
     try {
       state = AsyncValue.data(
-        await read(httpProvider).getBillsByUser(),
+        await ref.read(httpProvider).getBillsByUser(),
       );
-    } catch (e) {
-      state = AsyncValue.error(e);
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
       debugPrint('get bills $e');
     }
   }

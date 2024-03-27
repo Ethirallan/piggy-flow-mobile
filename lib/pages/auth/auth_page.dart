@@ -13,7 +13,7 @@ import 'package:piggy_flow_mobile/providers/shop_provider.dart';
 import '../../providers/category_provider.dart';
 
 class AuthPage extends HookConsumerWidget {
-  const AuthPage({Key? key}) : super(key: key);
+  const AuthPage({super.key});
 
   Duration get loginTime => const Duration(milliseconds: 2250);
   @override

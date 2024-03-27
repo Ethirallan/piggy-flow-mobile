@@ -5,11 +5,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:piggy_flow_mobile/es_widgets/es_staggered_list.dart';
 import 'package:piggy_flow_mobile/models/subscription.dart';
-import 'package:piggy_flow_mobile/pages/shop/new_subscription_page.dart';
+import 'package:piggy_flow_mobile/pages/subscription/new_subscription_page.dart';
 import 'package:piggy_flow_mobile/providers/subscription_provider.dart';
 
 class SubscriptionListPage extends HookConsumerWidget {
-  const SubscriptionListPage({Key? key}) : super(key: key);
+  const SubscriptionListPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

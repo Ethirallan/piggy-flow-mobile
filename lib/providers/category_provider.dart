@@ -5,22 +5,22 @@ import 'package:piggy_flow_mobile/providers/http_provider.dart';
 
 final categoryProvider =
     StateNotifierProvider<CategoryNotifier, List<Category>>((ref) {
-  return CategoryNotifier(ref.read);
+  return CategoryNotifier(ref);
 });
 
 class CategoryNotifier extends StateNotifier<List<Category>> {
   CategoryNotifier(
-    this.read, [
+    this.ref, [
     List<Category>? categorys,
   ]) : super(categorys ?? []) {
     getCategories();
   }
 
-  final Reader read;
+  final Ref ref;
 
   Future<void> getCategories() async {
     try {
-      state = await read(httpProvider).getCategoriesByUser();
+      state = await ref.read(httpProvider).getCategoriesByUser();
     } catch (e) {
       state = [];
       debugPrint('get categories $e');

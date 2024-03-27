@@ -8,7 +8,7 @@ import 'package:piggy_flow_mobile/providers/http_provider.dart';
 import 'package:piggy_flow_mobile/providers/account_provider.dart';
 
 class AccountListPage extends HookConsumerWidget {
-  const AccountListPage({Key? key}) : super(key: key);
+  const AccountListPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

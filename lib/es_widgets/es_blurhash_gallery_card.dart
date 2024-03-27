@@ -3,9 +3,9 @@ import 'package:flutter_blurhash/flutter_blurhash.dart';
 
 class ESBlurhashGalleryCard extends StatelessWidget {
   const ESBlurhashGalleryCard({
-    Key? key,
+    super.key,
     required this.blurhash,
-  }) : super(key: key);
+  });
 
   final String blurhash;
 

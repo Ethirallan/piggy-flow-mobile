@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 
 class ESGalleryCard extends StatelessWidget {
   const ESGalleryCard({
-    Key? key,
+    super.key,
     required this.child,
-  }) : super(
-          key: key,
-        );
+  });
 
   final Widget child;
 

@@ -5,22 +5,22 @@ import 'package:piggy_flow_mobile/providers/http_provider.dart';
 
 final accountProvider =
     StateNotifierProvider<AccountNotifier, List<Account>>((ref) {
-  return AccountNotifier(ref.read);
+  return AccountNotifier(ref);
 });
 
 class AccountNotifier extends StateNotifier<List<Account>> {
   AccountNotifier(
-    this.read, [
+    this.ref, [
     List<Account>? accounts,
   ]) : super(accounts ?? []) {
     getAccounts();
   }
 
-  final Reader read;
+  final Ref ref;
 
   Future<void> getAccounts() async {
     try {
-      state = await read(httpProvider).getAccountsByUser();
+      state = await ref.read(httpProvider).getAccountsByUser();
     } catch (e) {
       state = [];
       debugPrint('get accounts $e');

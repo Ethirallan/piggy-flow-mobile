@@ -10,7 +10,7 @@ import 'package:piggy_flow_mobile/pages/bill/new_bill_page.dart';
 import 'package:piggy_flow_mobile/providers/bill_provider.dart';
 
 class BillListPage extends HookConsumerWidget {
-  const BillListPage({Key? key}) : super(key: key);
+  const BillListPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

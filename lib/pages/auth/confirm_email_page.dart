@@ -7,7 +7,7 @@ import 'package:piggy_flow_mobile/providers/firebase_auth_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ConfirmEmailPage extends ConsumerStatefulWidget {
-  const ConfirmEmailPage({Key? key}) : super(key: key);
+  const ConfirmEmailPage({super.key});
 
   @override
   ConsumerState<ConfirmEmailPage> createState() => _ConfirmEmailPageState();

@@ -3,7 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:piggy_flow_mobile/providers/http_provider.dart';
 
 class ProgressPage extends HookConsumerWidget {
-  const ProgressPage({Key? key}) : super(key: key);
+  const ProgressPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

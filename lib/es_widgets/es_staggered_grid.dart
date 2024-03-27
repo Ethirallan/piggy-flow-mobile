@@ -5,8 +5,7 @@ class ESStaggeredGrid extends StatelessWidget {
   final Widget child;
   final int index;
 
-  const ESStaggeredGrid({Key? key, required this.child, required this.index})
-      : super(key: key);
+  const ESStaggeredGrid({super.key, required this.child, required this.index});
 
   @override
   Widget build(BuildContext context) {

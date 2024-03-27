@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:piggy_flow_mobile/es_widgets/es_new_item_alert_dialog.dart';
 import 'package:piggy_flow_mobile/models/category.dart';
+import 'package:piggy_flow_mobile/pages/category/new_category_alert_dialog.dart';
 import 'package:piggy_flow_mobile/providers/es_message_provider.dart';
 import 'package:piggy_flow_mobile/providers/http_provider.dart';
 import 'package:piggy_flow_mobile/providers/category_provider.dart';
 
 class CategoryListPage extends HookConsumerWidget {
-  const CategoryListPage({Key? key}) : super(key: key);
+  const CategoryListPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     useAutomaticKeepAlive(wantKeepAlive: true);
     final categories = ref.watch(categoryProvider);
     final newCategoryNameController = TextEditingController();
+    final newCategoryEmojiController = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
@@ -37,7 +38,7 @@ class CategoryListPage extends HookConsumerWidget {
                 leading: CircleAvatar(
                   backgroundColor: const Color(0xFFFFF3F2),
                   child: Text(
-                    (categories[index].name.toString()).substring(0, 1),
+                    categories[index].emoji,
                     style: const TextStyle(
                       color: Color(0xFFBD8180),
                       fontWeight: FontWeight.bold,
@@ -119,13 +120,14 @@ class CategoryListPage extends HookConsumerWidget {
             context: context,
             barrierDismissible: false,
             builder: (context) {
-              return ESNewItemAlertDialog(
-                controller: newCategoryNameController,
-                title: 'Add new category',
-                label: 'Category name',
+              return NewCategoryAlertDialog(
+                nameCtrl: newCategoryNameController,
+                emojiCtrl: newCategoryEmojiController,
                 onSave: () async {
-                  Category category =
-                      Category(name: newCategoryNameController.text);
+                  Category category = Category(
+                    name: newCategoryNameController.text,
+                    emoji: newCategoryEmojiController.text,
+                  );
                   bool success =
                       await ref.read(httpProvider).addCategory(category);
                   if (success) {

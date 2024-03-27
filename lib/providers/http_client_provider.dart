@@ -27,10 +27,10 @@ class AuthenticatedHttpClient extends http.BaseClient {
 class ESMultipartRequest extends http.MultipartRequest {
   /// Creates a new [MultipartRequest].
   ESMultipartRequest(
-    String method,
-    Uri url, {
+    super.method,
+    super.url, {
     required this.onProgress,
-  }): super(method, url);
+  });
 
   final void Function(int bytes, int totalBytes) onProgress;
 

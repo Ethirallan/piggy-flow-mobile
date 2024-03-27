@@ -76,8 +76,8 @@ class StatisticsPage extends HookConsumerWidget {
               color: Colors.primaries[category.id! % Colors.primaries.length],
               value: sum / total,
               title: isTouched
-                  ? '${category.name}\n${priceFormatter.format(sum)}'
-                  : "${(sum / total * 100).toStringAsFixed(0)}%",
+                  ? '${category.emoji} ${category.name}\n${priceFormatter.format(sum)}'
+                  : "${category.emoji} ${(sum / total * 100).toStringAsFixed(0)}%",
               radius: radius,
               titleStyle: TextStyle(
                 fontSize: fontSize,
@@ -308,8 +308,7 @@ class StatisticsPage extends HookConsumerWidget {
                                           backgroundColor:
                                               const Color(0xFFFFF3F2),
                                           child: Text(
-                                            (category.name.toString())
-                                                .substring(0, 1),
+                                            category.emoji,
                                             style: const TextStyle(
                                               color: Color(0xFFBD8180),
                                               fontWeight: FontWeight.bold,

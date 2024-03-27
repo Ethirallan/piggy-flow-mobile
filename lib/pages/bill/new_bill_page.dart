@@ -22,7 +22,7 @@ import 'package:piggy_flow_mobile/providers/image_picker_provider.dart';
 import 'package:piggy_flow_mobile/providers/shop_provider.dart';
 
 class NewBillPage extends HookConsumerWidget {
-  const NewBillPage({Key? key}) : super(key: key);
+  const NewBillPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -166,7 +166,7 @@ class NewBillPage extends HookConsumerWidget {
                           controller: priceCtrl,
                           inputFormatters: [
                             FilteringTextInputFormatter.allow(
-                              RegExp(r'^\d*\.?\d{0,2}'),
+                              RegExp(r'^\d*\,?\d{0,2}'),
                             ),
                           ],
                           decoration: const InputDecoration(
@@ -226,7 +226,6 @@ class NewBillPage extends HookConsumerWidget {
                             'Personal',
                             ...accountList
                                 .map((Account account) => account.name)
-                                .toList()
                           ],
                           dropdownDecoratorProps: const DropDownDecoratorProps(
                             dropdownSearchDecoration: InputDecoration(
@@ -414,7 +413,7 @@ class NewBillPage extends HookConsumerWidget {
                         next: () async {
                           newBill.value = newBill.value.copyWith(
                             price: double.parse(
-                              priceCtrl.text.replaceAll('€', '').trim(),
+                              priceCtrl.text.replaceAll('€', '').replaceAll(',', '.').trim(),
                             ),
                             comment: commentCtrl.text,
                           );

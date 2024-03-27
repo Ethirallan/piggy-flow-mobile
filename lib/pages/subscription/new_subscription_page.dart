@@ -17,7 +17,7 @@ import 'package:piggy_flow_mobile/providers/http_provider.dart';
 import 'package:piggy_flow_mobile/providers/shop_provider.dart';
 
 class NewSubscriptionPage extends HookConsumerWidget {
-  const NewSubscriptionPage({Key? key}) : super(key: key);
+  const NewSubscriptionPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -34,8 +34,6 @@ class NewSubscriptionPage extends HookConsumerWidget {
         chargeDay: DateTime.now().day,
         price: 0.0,
         name: '',
-        // category: categoryList.first,
-        // shop: shopList.first,
       ),
     );
     final formKey = useState<GlobalKey<FormState>>(GlobalKey<FormState>());
@@ -165,7 +163,9 @@ class NewSubscriptionPage extends HookConsumerWidget {
                           },
                           textInputAction: TextInputAction.next,
                           validator: (String? value) {
-                            if (value == null || value.isEmpty || value.length < 3) {
+                            if (value == null ||
+                                value.isEmpty ||
+                                value.length < 3) {
                               return '';
                             }
                             return null;
@@ -256,7 +256,6 @@ class NewSubscriptionPage extends HookConsumerWidget {
                             'Personal',
                             ...accountList
                                 .map((Account account) => account.name)
-                                .toList()
                           ],
                           dropdownDecoratorProps: const DropDownDecoratorProps(
                             dropdownSearchDecoration: InputDecoration(

@@ -9,10 +9,10 @@ import 'package:piggy_flow_mobile/models/bill_photo.dart';
 
 class ESPhotoListview extends HookConsumerWidget {
   const ESPhotoListview({
-    Key? key,
+    super.key,
     required this.photos,
     this.hiddenMsg = false,
-  }) : super(key: key);
+  });
 
   final List<BillPhoto> photos;
   final bool hiddenMsg;
