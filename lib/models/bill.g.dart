@@ -6,7 +6,7 @@ part of 'bill.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_Bill _$$_BillFromJson(Map<String, dynamic> json) => _$_Bill(
+_$BillImpl _$$BillImplFromJson(Map<String, dynamic> json) => _$BillImpl(
       id: json['id'] as int?,
       user: json['user'] == null
           ? null
@@ -29,7 +29,8 @@ _$_Bill _$$_BillFromJson(Map<String, dynamic> json) => _$_Bill(
           const [],
     );
 
-Map<String, dynamic> _$$_BillToJson(_$_Bill instance) => <String, dynamic>{
+Map<String, dynamic> _$$BillImplToJson(_$BillImpl instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'user': instance.user?.toJson(),
       'account': instance.account?.toJson(),

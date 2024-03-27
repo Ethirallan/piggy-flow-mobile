@@ -170,9 +170,10 @@ class _$BillCopyWithImpl<$Res, $Val extends Bill>
 }
 
 /// @nodoc
-abstract class _$$_BillCopyWith<$Res> implements $BillCopyWith<$Res> {
-  factory _$$_BillCopyWith(_$_Bill value, $Res Function(_$_Bill) then) =
-      __$$_BillCopyWithImpl<$Res>;
+abstract class _$$BillImplCopyWith<$Res> implements $BillCopyWith<$Res> {
+  factory _$$BillImplCopyWith(
+          _$BillImpl value, $Res Function(_$BillImpl) then) =
+      __$$BillImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -197,9 +198,10 @@ abstract class _$$_BillCopyWith<$Res> implements $BillCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_BillCopyWithImpl<$Res> extends _$BillCopyWithImpl<$Res, _$_Bill>
-    implements _$$_BillCopyWith<$Res> {
-  __$$_BillCopyWithImpl(_$_Bill _value, $Res Function(_$_Bill) _then)
+class __$$BillImplCopyWithImpl<$Res>
+    extends _$BillCopyWithImpl<$Res, _$BillImpl>
+    implements _$$BillImplCopyWith<$Res> {
+  __$$BillImplCopyWithImpl(_$BillImpl _value, $Res Function(_$BillImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -215,7 +217,7 @@ class __$$_BillCopyWithImpl<$Res> extends _$BillCopyWithImpl<$Res, _$_Bill>
     Object? comment = freezed,
     Object? photos = null,
   }) {
-    return _then(_$_Bill(
+    return _then(_$BillImpl(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -259,8 +261,8 @@ class __$$_BillCopyWithImpl<$Res> extends _$BillCopyWithImpl<$Res, _$_Bill>
 /// @nodoc
 
 @JsonSerializable(explicitToJson: true)
-class _$_Bill extends _Bill {
-  _$_Bill(
+class _$BillImpl extends _Bill {
+  _$BillImpl(
       {this.id,
       this.user,
       this.account,
@@ -273,7 +275,8 @@ class _$_Bill extends _Bill {
       : _photos = photos,
         super._();
 
-  factory _$_Bill.fromJson(Map<String, dynamic> json) => _$$_BillFromJson(json);
+  factory _$BillImpl.fromJson(Map<String, dynamic> json) =>
+      _$$BillImplFromJson(json);
 
   @override
   final int? id;
@@ -306,10 +309,10 @@ class _$_Bill extends _Bill {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Bill &&
+            other is _$BillImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.user, user) || other.user == user) &&
             (identical(other.account, account) || other.account == account) &&
@@ -330,12 +333,12 @@ class _$_Bill extends _Bill {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BillCopyWith<_$_Bill> get copyWith =>
-      __$$_BillCopyWithImpl<_$_Bill>(this, _$identity);
+  _$$BillImplCopyWith<_$BillImpl> get copyWith =>
+      __$$BillImplCopyWithImpl<_$BillImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_BillToJson(
+    return _$$BillImplToJson(
       this,
     );
   }
@@ -351,10 +354,10 @@ abstract class _Bill extends Bill {
       final Category? category,
       required final double price,
       final String? comment,
-      final List<BillPhoto> photos}) = _$_Bill;
+      final List<BillPhoto> photos}) = _$BillImpl;
   _Bill._() : super._();
 
-  factory _Bill.fromJson(Map<String, dynamic> json) = _$_Bill.fromJson;
+  factory _Bill.fromJson(Map<String, dynamic> json) = _$BillImpl.fromJson;
 
   @override
   int? get id;
@@ -376,5 +379,6 @@ abstract class _Bill extends Bill {
   List<BillPhoto> get photos;
   @override
   @JsonKey(ignore: true)
-  _$$_BillCopyWith<_$_Bill> get copyWith => throw _privateConstructorUsedError;
+  _$$BillImplCopyWith<_$BillImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }

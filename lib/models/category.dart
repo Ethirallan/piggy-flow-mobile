@@ -14,7 +14,9 @@ abstract class Category implements _$Category {
     int? id,
     User? user,
     required String name,
+    required String emoji,
   }) = _Category;
 
-  factory Category.fromJson(Map<String, dynamic> json) => _$CategoryFromJson(json);
+  factory Category.fromJson(Map<String, dynamic> json) =>
+      _$CategoryFromJson(json);
 }

@@ -6,7 +6,8 @@ part of 'bill_photo.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_BillPhoto _$$_BillPhotoFromJson(Map<String, dynamic> json) => _$_BillPhoto(
+_$BillPhotoImpl _$$BillPhotoImplFromJson(Map<String, dynamic> json) =>
+    _$BillPhotoImpl(
       id: json['id'] as int?,
       bill: json['bill'] == null
           ? null
@@ -16,7 +17,7 @@ _$_BillPhoto _$$_BillPhotoFromJson(Map<String, dynamic> json) => _$_BillPhoto(
       blurhash: json['blurhash'] as String?,
     );
 
-Map<String, dynamic> _$$_BillPhotoToJson(_$_BillPhoto instance) =>
+Map<String, dynamic> _$$BillPhotoImplToJson(_$BillPhotoImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'bill': instance.bill?.toJson(),
